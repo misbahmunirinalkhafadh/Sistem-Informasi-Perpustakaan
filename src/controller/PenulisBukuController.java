@@ -5,7 +5,9 @@
  */
 
 package controller;
+import daos.BukuDAO;
 import daos.PenulisBukuDAO;
+import daos.PenulisDAO;
 import entities.Penulis;
 import entities.Buku;
 import entities.PenulisBuku;
@@ -18,13 +20,18 @@ import java.util.List;
 public class PenulisBukuController {
 
     private final PenulisBukuDAO pbdao;
+    private final PenulisDAO penulisDAO;
+    private final BukuDAO bukuDAO;
 
     public PenulisBukuController(Connection connection) {
         this.pbdao = new PenulisBukuDAO(connection);
+        this.bukuDAO = new BukuDAO(connection);
+        this.penulisDAO = new PenulisDAO(connection);
     }
     
-    public boolean save(Buku bukuId, Penulis penulisId) {
-        return this.pbdao.insert(new PenulisBuku(bukuId, penulisId));
+    public boolean save(String bukuId, String penulisBukuId) {
+        return this.pbdao.insert(new PenulisBuku(new Buku(bukuId, "", "", 0), 
+                new Penulis(penulisBukuId, "")));
     }
 
     public boolean drop(String bukuId) {

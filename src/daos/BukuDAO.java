@@ -15,7 +15,8 @@ import java.util.List;
  * @author Dayinta Warih Wulandari
  */
 public class BukuDAO {
-        private final FunctionDAO fdao;
+    
+    private final FunctionDAO fdao;
 
     public BukuDAO(Connection connection) {
         this.fdao = new FunctionDAO(connection);
@@ -28,7 +29,7 @@ public class BukuDAO {
     }
 
     public boolean update(Buku buku) {
-        return this.fdao.executeDML("UPDATE Buku SET role='"
+        return this.fdao.executeDML("UPDATE Buku SET judul='"
                 + buku.getJudul() + "', tahun='" + buku.getTahun() + "', status='"
                 + buku.getStatus() + " WHERE id=" + buku.getId());
     }

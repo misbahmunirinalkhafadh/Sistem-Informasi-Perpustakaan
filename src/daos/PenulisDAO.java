@@ -20,8 +20,8 @@ private final FunctionDAO fdao;
     }
 
     public boolean insert(Penulis penulis) {
-        return this.fdao.executeDML("INSERT INTO Penulis VALUES("
-                + penulis.getId() + ",'" + penulis.getPenulis() + "')");
+        return this.fdao.executeDML("INSERT INTO Penulis VALUES('"
+                + penulis.getId() + "','" + penulis.getPenulis() + "')");
     }
 
     public boolean update(Penulis penulis) {

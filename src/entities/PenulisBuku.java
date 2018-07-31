@@ -20,8 +20,6 @@ public class PenulisBuku {
         this.penulisId = penulisId;
     }
 
-    
-    
     /**
      * @return the bukuID
      */

@@ -6,9 +6,12 @@
 
 package controller;
 
+import daos.AkunDAO;
+import daos.RoleDAO;
 import daos.TransaksiDAO;
 import entities.Transaksi;
 import entities.Akun;
+import entities.Role;
 import java.sql.Connection;
 import java.util.List;
 import java.text.SimpleDateFormat;
@@ -19,26 +22,38 @@ import java.text.SimpleDateFormat;
 public class TransaksiController {
 
     private final TransaksiDAO tdao;
+    private final AkunDAO akunDAO;
+    private Role role;
+    private final RoleDAO roleDAO;
     
-    SimpleDateFormat sdf = new SimpleDateFormat("\"dd/MM/yyyy\"");
+    
+//    SimpleDateFormat sdf = new SimpleDateFormat("\"dd/MM/yyyy\"");
     
     public TransaksiController(Connection connection) {
         this.tdao = new TransaksiDAO(connection);
+        this.akunDAO = new AkunDAO(connection);
+        this.roleDAO = new RoleDAO(connection);
     }
             
-    public boolean save(String id, String tglPinjam, String tglKembali, Akun akunId, String stat, String terlambat, String denda){
+    public boolean save(String id, String tglPinjam, String tglKembali, String status, String terlambat, String denda, String akunId) {
         java.sql.Date date1 = java.sql.Date.valueOf(tglPinjam);
         java.sql.Date date2 = java.sql.Date.valueOf(tglKembali);
-        return this.tdao.insert(new Transaksi(id, date1,
-                date2, Integer.parseInt(stat), Integer.parseInt(terlambat), Integer.parseInt(denda), akunId));
+
+        return this.tdao.insert(new Transaksi(id, date1, date2,
+                Integer.parseInt(status), Integer.parseInt(terlambat), Integer.parseInt(denda),
+                new Akun(id, "", "", role, "")));
+
+    }
+
+    public boolean edit(String id, String tglPinjam, String tglKembali, String status, String terlambat, String denda, String akunId) {
+        java.sql.Date date1 = java.sql.Date.valueOf(tglPinjam);
+        java.sql.Date date2 = java.sql.Date.valueOf(tglKembali);
+
+        return this.tdao.update(new Transaksi(id, date1, date2,
+                Integer.parseInt(status), Integer.parseInt(terlambat), Integer.parseInt(denda),
+                new Akun(id, "", "", role, "")));
     }
     
-    public boolean edit(String id, String tglPinjam, String tglKembali, Akun akunId, String stat, String terlambat, String denda){
-                java.sql.Date date1 = java.sql.Date.valueOf(tglPinjam);
-        java.sql.Date date2 = java.sql.Date.valueOf(tglKembali);
-        return this.tdao.update(new Transaksi(id, date1,
-                date2, Integer.parseInt(stat), Integer.parseInt(terlambat), Integer.parseInt(denda), akunId));
-    }
     
     public boolean drop(String transId){
         return this.tdao.delete(transId);

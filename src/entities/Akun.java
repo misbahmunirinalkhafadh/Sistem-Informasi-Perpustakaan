@@ -14,10 +14,13 @@ public class Akun {
     private String id;
     private String nama;
     private String alamat;
-    private int roleId;
+    private Role roleId;
     private String password;
 
-    public Akun(String id, String nama, String alamat, String password, int roleId) {
+    public Akun() {
+    }
+
+    public Akun(String id, String nama, String alamat, Role roleId, String password) {
         this.id = id;
         this.nama = nama;
         this.alamat = alamat;
@@ -25,57 +28,44 @@ public class Akun {
         this.password = password;
     }
 
-    public Akun(String id, String nama, String alamat, String password, Role roleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
-    
     public String getId() {
         return id;
-    }
-
-    public String getNama() {
-        return nama;
-    }
-
-    public String getAlamat() {
-        return alamat;
-    }
-
-    public int getRoleId() {
-        return roleId;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
+    public String getNama() {
+        return nama;
+    }
+
     public void setNama(String nama) {
         this.nama = nama;
+    }
+
+    public String getAlamat() {
+        return alamat;
     }
 
     public void setAlamat(String alamat) {
         this.alamat = alamat;
     }
 
-    public void setRoleId(int roleId) {
+    public Role getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Role roleId) {
         this.roleId = roleId;
     }
 
-    /**
-     * @return the password
-     */
     public String getPassword() {
         return password;
     }
 
-    /**
-     * @param password the password to set
-     */
     public void setPassword(String password) {
         this.password = password;
     }
-    
     
 }

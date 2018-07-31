@@ -18,7 +18,6 @@ public class Role {
         this.id = id;
         this.role = role;
     }
-
     
     /**
      * @return the id
