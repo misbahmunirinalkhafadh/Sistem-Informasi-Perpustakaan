@@ -22,15 +22,18 @@ public class AdminView extends javax.swing.JInternalFrame {
     private final BukuController bukuController;
     private final PenulisController penulisController;
     private final PenulisBukuController pbc;
+    private final TransaksiBukuController tbc;
     private final ViewProccess viewProccess;
     private final String[] headerBuku = {"ID Buku", "Judul", "Tahun", "Status"};
     private final String[] headerPenulis = {"ID Penulis", "Penulis"};
     private final String[] headerAkun = {"ID Member", "Nama", "Alamat"};
     private final String[] headerDetailBuku = {"ID Buku", "ID Penulis", "Judul", "Penulis", "Status"};
+    private final String[] headerTransBuku = {"ID Transaksi", "ID Akun", "Nama", "Judul", "Tgl Pinjam", "Tgl Kembali", "Status", "Terlambat", "Denda"};
     private final String[] categoriesAkun;
     private final String[] categoriesBuku;
     private final String[] categoriesPenulis;
     private final String[] categoriesDetailBuku;
+    private final String[] categoriesTransBuku;
 
     /**
      * Creates new form AdminView
@@ -40,10 +43,12 @@ public class AdminView extends javax.swing.JInternalFrame {
         this.categoriesBuku = new String[]{"id", "judul", "tahun", "status"};
         this.categoriesPenulis = new String[]{"id", "penulis"};
         this.categoriesDetailBuku = new String[]{"buku_id", "penulis_id", "judul", "penulis", "status"};
+        this.categoriesTransBuku = new String[]{"transaksi_id", "id", "nama", "judul", "Tgl tanggal_pinjam", "tanggal_kembali", "status", "terlambat", "denda"};
         initComponents();
         this.akunController = new AkunController(connection);
         this.bukuController = new BukuController(connection);
         this.penulisController = new PenulisController(connection);
+        this.tbc = new TransaksiBukuController(connection);
         this.pbc = new PenulisBukuController(connection);
         this.viewProccess = new ViewProccess();
         //this.loadSearchComboBox();
@@ -128,6 +133,11 @@ public class AdminView extends javax.swing.JInternalFrame {
         lblRole.setText("jLabel1");
 
         btnTrans.setText("Transaksi");
+        btnTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTransActionPerformed(evt);
+            }
+        });
 
         btnBuku.setText("Tambah Buku");
         btnBuku.addActionListener(new java.awt.event.ActionListener() {
@@ -470,6 +480,10 @@ public class AdminView extends javax.swing.JInternalFrame {
         bindingTableDetailBuku();
     }//GEN-LAST:event_btnDetailBukuActionPerformed
 
+    private void btnTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransActionPerformed
+        bindingTableTransBuku();
+    }//GEN-LAST:event_btnTransActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuku;
@@ -523,17 +537,24 @@ public class AdminView extends javax.swing.JInternalFrame {
         this.viewProccess.loadData(this, tblAdmin, headerBuku,
                 this.bukuController.bindingSort(categoriesBuku[0], "asc"));
     }
+
     public void bindingTablePenulis() {
         this.viewProccess.loadData(this, tblAdmin, headerPenulis,
                 this.penulisController.bindingSort(categoriesPenulis[0], "asc"));
     }
-        public void bindingTableMember() {
+
+    public void bindingTableMember() {
         String idmember = "2";
         this.viewProccess.loadData(this, tblAdmin, headerAkun,
                 this.akunController.find(categoriesAkun[0], idmember));
     }
-          public void bindingTableDetailBuku() {
+
+    public void bindingTableDetailBuku() {
         this.viewProccess.loadData(this, tblAdmin, headerDetailBuku,
                 this.pbc.bindingSort(categoriesDetailBuku[0], "asc"));
-    }  
+    }
+        public void bindingTableTransBuku() {
+        this.viewProccess.loadData(this, tblAdmin, headerTransBuku,
+                this.tbc.bindingSort(categoriesTransBuku[0], "asc"));
+    }
 }
