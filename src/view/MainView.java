@@ -236,12 +236,12 @@ public class MainView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-//        boolean flag=this.akunController.save(txtNamaReg.getText(), txtAlamatReg.getText(), txtUserReg.getText(), txtPassReg.getPassword().toString(), 2);
-//         String message="Failed to save data...";
-//         if(flag){
-//             message="Success to save data...";
-//         }
-//         JOptionPane.showMessageDialog(this, message, "Notifications", JOptionPane.INFORMATION_MESSAGE);
+        //        boolean flag=this.akunController.save(txtNamaReg.getText(), txtAlamatReg.getText(), txtUserReg.getText(), txtPassReg.getPassword().toString(), 2);
+        //         String message="Failed to save data...";
+        //         if(flag){
+            //             message="Success to save data...";
+            //         }
+        //         JOptionPane.showMessageDialog(this, message, "Notifications", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
