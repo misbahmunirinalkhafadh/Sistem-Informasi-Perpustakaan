@@ -31,9 +31,10 @@ public class MemberView extends javax.swing.JInternalFrame {
      * Creates new form MemberView
      */
     public MemberView(Connection connection) {
-        initComponents();
         this.categoriesDetailBuku = new String[]{"buku_id", "penulis_id", "judul", "penulis", "status"};
         this.categoriesTransBuku = new String[]{"transaksi_id", "id", "nama", "judul", "Tgl tanggal_pinjam", "tanggal_kembali", "status", "terlambat", "denda"};
+        
+        initComponents();
         this.tbc = new TransaksiBukuController(connection);
         this.pbc = new PenulisBukuController(connection);
         this.viewProccess = new ViewProccess();

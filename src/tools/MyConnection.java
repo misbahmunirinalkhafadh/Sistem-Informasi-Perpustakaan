@@ -23,7 +23,7 @@ public class MyConnection {
             ods.setPortNumber(1521);
 //            ods.setDatabaseName("HR");
             ods.setUser("system");
-            ods.setPassword("dayinta11");
+            ods.setPassword("bismillah");
             connect = ods.getConnection();
             connect.createStatement()
                     .execute("alter session set " + "current_schema=Perpustakaan");
@@ -32,8 +32,8 @@ public class MyConnection {
         }
         return connect;
     }
-//    public static void main(String[] args) {
-//        MyConnection mc = new MyConnection();
-//        System.out.println(mc.getConnection());
-//    }
+    public static void main(String[] args) {
+        MyConnection mc = new MyConnection();
+        System.out.println(mc.getConnection());
+    }
 }
