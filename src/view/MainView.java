@@ -60,6 +60,7 @@ public class MainView extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("SISTEM PERPUSTAKAAN");
 
         pnlLogin.setBorder(javax.swing.BorderFactory.createTitledBorder("Already have an account? Log in here"));
@@ -89,20 +90,17 @@ public class MainView extends javax.swing.JFrame {
             .addGroup(pnlLoginLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlLoginLayout.createSequentialGroup()
-                        .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblUserLogin)
-                            .addComponent(lblPassLogin))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlLoginLayout.createSequentialGroup()
-                                .addComponent(txtPassLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 45, Short.MAX_VALUE))
-                            .addComponent(txtUserLogin))
-                        .addGap(10, 10, 10))
-                    .addGroup(pnlLoginLayout.createSequentialGroup()
-                        .addComponent(btnLogin)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(lblUserLogin)
+                    .addComponent(lblPassLogin))
+                .addGap(18, 18, 18)
+                .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(txtUserLogin)
+                    .addComponent(txtPassLogin))
+                .addContainerGap())
+            .addGroup(pnlLoginLayout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addComponent(btnLogin)
+                .addGap(214, 214, 214))
         );
         pnlLoginLayout.setVerticalGroup(
             pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,7 +113,7 @@ public class MainView extends javax.swing.JFrame {
                 .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPassLogin)
                     .addComponent(txtPassLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addComponent(btnLogin)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -149,23 +147,19 @@ public class MainView extends javax.swing.JFrame {
             .addGroup(pnlRegisterLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlRegisterLayout.createSequentialGroup()
-                        .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNama)
-                            .addComponent(lblAlamat))
-                        .addGap(31, 31, 31)
-                        .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNamaReg)
-                            .addComponent(txtAlamatReg)))
-                    .addGroup(pnlRegisterLayout.createSequentialGroup()
-                        .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnRegister)
-                            .addGroup(pnlRegisterLayout.createSequentialGroup()
-                                .addComponent(lblPassReg)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtPassReg, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 133, Short.MAX_VALUE)))
+                    .addComponent(lblNama)
+                    .addComponent(lblAlamat)
+                    .addComponent(lblPassReg))
+                .addGap(18, 18, 18)
+                .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtAlamatReg, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtNamaReg, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtPassReg))
                 .addContainerGap())
+            .addGroup(pnlRegisterLayout.createSequentialGroup()
+                .addGap(86, 86, 86)
+                .addComponent(btnRegister)
+                .addGap(201, 201, 201))
         );
         pnlRegisterLayout.setVerticalGroup(
             pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,43 +173,37 @@ public class MainView extends javax.swing.JFrame {
                     .addComponent(lblAlamat)
                     .addComponent(txtAlamatReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblPassReg)
-                    .addComponent(txtPassReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(67, 67, 67)
+                    .addComponent(txtPassReg, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(btnRegister)
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        dskMaster.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dskMaster.setLayer(pnlLogin, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dskMaster.setLayer(pnlRegister, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dskMasterLayout = new javax.swing.GroupLayout(dskMaster);
         dskMaster.setLayout(dskMasterLayout);
         dskMasterLayout.setHorizontalGroup(
             dskMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dskMasterLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(pnlRegister, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dskMasterLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(228, 228, 228))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlLogin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlRegister, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         dskMasterLayout.setVerticalGroup(
             dskMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dskMasterLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(26, 26, 26)
                 .addComponent(jLabel1)
+                .addGap(26, 26, 26)
+                .addComponent(pnlLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(dskMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlRegister, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addComponent(pnlRegister, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(37, Short.MAX_VALUE))
         );
-        dskMaster.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dskMaster.setLayer(pnlLogin, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dskMaster.setLayer(pnlRegister, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         pnlRegister.getAccessibleContext().setAccessibleName("Didn't have an acoount? Register here");
 
@@ -223,25 +211,27 @@ public class MainView extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dskMaster)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(dskMaster)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(dskMaster)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-//        boolean flag=this.akunController.save(txtNamaReg.getText(), txtAlamatReg.getText(), txtUserReg.getText(), txtPassReg.getPassword().toString(), 2);
-//         String message="Failed to save data...";
-//         if(flag){
-//             message="Success to save data...";
-//         }
-//         JOptionPane.showMessageDialog(this, message, "Notifications", JOptionPane.INFORMATION_MESSAGE);
+        //        boolean flag=this.akunController.save(txtNamaReg.getText(), txtAlamatReg.getText(), txtUserReg.getText(), txtPassReg.getPassword().toString(), 2);
+        //         String message="Failed to save data...";
+        //         if(flag){
+            //             message="Success to save data...";
+            //         }
+        //         JOptionPane.showMessageDialog(this, message, "Notifications", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
