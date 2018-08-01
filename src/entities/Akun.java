@@ -28,6 +28,14 @@ public class Akun {
         this.password = password;
     }
 
+    public Akun(String nama, String alamat, String password) {
+        this.nama = nama;
+        this.alamat = alamat;
+        this.password = password;
+    }
+
+    
+    
     public Akun(String id, String nama, String alamat, String password, Role roleId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

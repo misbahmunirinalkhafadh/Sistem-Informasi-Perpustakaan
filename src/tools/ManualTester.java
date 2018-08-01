@@ -62,6 +62,7 @@ public class ManualTester {
 //        System.out.println(jobController.findById("SA_REP").getJobTitle());   
         PenulisBukuController pbc=new PenulisBukuController(connection);
         System.out.println(new PenulisBukuDAO(connection).getAll().size());
+
     }
 }
     

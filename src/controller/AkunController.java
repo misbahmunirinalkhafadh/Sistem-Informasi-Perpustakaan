@@ -26,8 +26,8 @@ public class AkunController {
                 this.roleDAO = new RoleDAO(connection);
     }
 
-    public boolean save(String id, String nama, String alamat, String roleId, String password) {
-        return this.adao.insert(new Akun(id, nama, alamat, new Role(roleId, ""), password));
+    public boolean save(String nama, String alamat, String password) {
+        return this.adao.insert(new Akun(nama, alamat, password));
     }
 
     public boolean edit(String id, String nama, String alamat, String roleId, String password) {

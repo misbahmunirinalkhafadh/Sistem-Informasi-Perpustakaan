@@ -8,6 +8,8 @@ package view;
 import java.sql.Connection;
 import tools.MyConnection;
 import controller.AkunController;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -226,16 +228,76 @@ public class MainView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        //        boolean flag=this.akunController.save(txtNamaReg.getText(), txtAlamatReg.getText(), txtUserReg.getText(), txtPassReg.getPassword().toString(), 2);
-        //         String message="Failed to save data...";
-        //         if(flag){
-            //             message="Success to save data...";
-            //         }
-        //         JOptionPane.showMessageDialog(this, message, "Notifications", JOptionPane.INFORMATION_MESSAGE);
+//        boolean flag = this.akunController.save(txtNamaReg.getText(), txtAlamatReg.getText(), txtPassReg.getPassword().toString());
+//        String message = "Failed to save data...";
+//        if (flag) {
+//            message = "Success to save data...";
+//        }
+        System.out.println(txtNamaReg.getText().length());
+        System.out.println(txtAlamatReg.getText().length());
+        System.out.println(txtPassReg.getPassword().toString().length());
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        this.viewProccess.callForm(dskMaster, new AdminView(connection));
+//        this.viewProccess.callForm(dskMaster, new AdminView(connection));
+        
+        if (txtUserLogin.getText().equals("") && txtPassLogin.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Masukkan id dan password!!");
+        } else if (txtUserLogin.getText().equals("") || txtPassLogin.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Lengkapi data");
+        } else {
+
+            Connection connection = new MyConnection().getConnection();
+
+            try {
+                Statement stat = connection.createStatement();
+                String query = "select * from akun where nama = '"
+                        + txtUserLogin.getText() + "' and password = '"
+                        + txtPassLogin.getText() + "'and role_id = '1'";
+                ResultSet rs = stat.executeQuery(query);
+
+                while (rs.next()) {
+
+                    AdminView adminView = new AdminView(connection);
+
+                    java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+                    adminView.setLocation((screenSize.width / 2 - adminView.getWidth() / 2), (screenSize.height / 2 - adminView.getHeight() / 2));
+                    adminView.setVisible(true);
+                    JOptionPane.showMessageDialog(null, "Login Berhasil, login sebagai " + txtUserLogin.getText() + " ");
+
+                    adminView.show();
+                    dskMaster.add(adminView);
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "GAGAL LOGIN !");
+            }
+
+            try {
+                Statement stat = connection.createStatement();
+                String query = "select * from akun where nama = '"
+                        + txtUserLogin.getText() + "' and password = '"
+                        + txtPassLogin.getText() + "'and role_id = '2'";
+                ResultSet rs = stat.executeQuery(query);
+
+                while (rs.next()) {
+
+                    MemberView memberView = new MemberView(connection);
+
+                    java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+                    memberView.setLocation((screenSize.width / 2 - memberView.getWidth() / 2), (screenSize.height / 2 - memberView.getHeight() / 2));
+                    memberView.setVisible(true);
+                    JOptionPane.showMessageDialog(null, "Login Berhasil, login sebagai " + txtUserLogin.getText() + " ");
+
+                    memberView.show();
+                    dskMaster.add(memberView);
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "GAGAL LOGIN !");
+            }
+
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
@@ -291,6 +353,5 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtPassReg;
     private javax.swing.JTextField txtUserLogin;
     // End of variables declaration//GEN-END:variables
-
 
 }
