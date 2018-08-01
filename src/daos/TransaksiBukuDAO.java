@@ -20,14 +20,14 @@ public class TransaksiBukuDAO {
     public TransaksiBukuDAO(Connection connection) {
         this.fdao = new FunctionDAO(connection);
     }
-    
-    public boolean insert(TransaksiBuku transaksiBuku) {
-        return this.fdao.executeDML("INSERT INTO trans_buku VALUES("
-                + transaksiBuku.getBukuId().getId() + ",'" + transaksiBuku.getBukuId().getId()+ "')");
+
+    public boolean insert(TransaksiBuku tb) {
+        return this.fdao.executeDML("INSERT INTO Transaksi_Buku VALUES("
+                + tb.getBukuId() + ",'" + tb.getTransaksiId() + "')");
     }
 
     public boolean delete(String transId) {
-        return this.fdao.executeDML("DELETE FROM trans_buku WHERE transaksi_id=" + transId);
+        return this.fdao.executeDML("DELETE FROM Transaksi_Buku WHERE buku_id=" + transId);
     }
 
     public List<Object[]> getAll() {

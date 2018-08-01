@@ -22,12 +22,6 @@ public class RoleController {
         this.rdao = new RoleDAO(connection);
     }
     
-    /**
-     * 
-     * @param roleId parameter role
-     * @param role parameter role
-     * @return 
-     */
     public boolean save(String roleId, String role){
         return this.rdao.insert(new Role(roleId, role));
     }

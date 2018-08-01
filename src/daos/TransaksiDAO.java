@@ -22,21 +22,23 @@ public class TransaksiDAO {
     }
     
     public boolean insert(Transaksi transaksi) {
-        return this.fdao.executeDML("INSERT INTO Transaksi values('"+transaksi.getId()
-                +"', to_date('"+transaksi.getTanggalPinjam()+"','dd/mm/yyyy')"
-                + ", to_date('"+transaksi.getTanggalKembali()+"','dd/mm/yyyy')"
-                + ","+transaksi.getStatus_pinjam()+","+transaksi.getTerlambat()+"," 
-                + transaksi.getDenda() + ",'"+transaksi.getAkunId()+"')");
+        return this.fdao.executeDML("INSERT INTO Transaksi VALUES('"
+                + transaksi.getId() + "', '" + transaksi.getTanggalPinjam() + "', '" + transaksi.getTanggalKembali()
+                + "', '" + transaksi.getAkunId()
+                + "', " + transaksi.getStatus_pinjam()
+                + "," + transaksi.getTerlambat()
+                + "," + transaksi.getDenda()
+                + ")");
     }
 
     public boolean update(Transaksi transaksi) {
-        return this.fdao.executeDML("UPDATE Transaksi set id = '' , "
-                + "tanggal_pinjam = to_date('"+transaksi.getTanggalPinjam()+"','dd/mm/yyyyy'), "
-                + "tanggal_kembali = to_date('"+transaksi.getTanggalKembali()+"','dd/mm/yyyy'), "
-                + "status_pinjam = "+transaksi.getStatus_pinjam()+", "
-                + "terlambat = "+transaksi.getTerlambat()+", "
-                + "denda = "+transaksi.getDenda()+", "
-                + "akun_id = '"+transaksi.getAkunId()+"'");
+        return this.fdao.executeDML("UPDATE Transaksi SET tanggal_pinjam='"
+                + transaksi.getTanggalPinjam() + "', tanggal_kembali='" + transaksi.getTanggalKembali()
+                + "', akun_id='" + transaksi.getAkunId()
+                + "', status_pinjam=" + transaksi.getStatus_pinjam()
+                + ", terlambat=" + transaksi.getTerlambat()
+                + ", denda=" + transaksi.getDenda()
+                + " WHERE id='" + transaksi.getId()+"')");
     }
 
     public boolean delete(String transId) {

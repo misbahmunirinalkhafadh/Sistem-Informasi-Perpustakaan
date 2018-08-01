@@ -61,16 +61,17 @@ public class MainView extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 255));
         jLabel1.setText("SISTEM PERPUSTAKAAN");
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         pnlLogin.setBorder(javax.swing.BorderFactory.createTitledBorder("Already have an account? Log in here"));
         pnlLogin.setForeground(new java.awt.Color(255, 255, 255));
 
         lblUserLogin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblUserLogin.setForeground(new java.awt.Color(255, 255, 255));
         lblUserLogin.setText("Username");
         lblUserLogin.setToolTipText("");
 
         lblPassLogin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPassLogin.setForeground(new java.awt.Color(255, 255, 255));
         lblPassLogin.setText("Password");
         lblPassLogin.setToolTipText("");
 
@@ -93,11 +94,15 @@ public class MainView extends javax.swing.JFrame {
                             .addComponent(lblUserLogin)
                             .addComponent(lblPassLogin))
                         .addGap(18, 18, 18)
-                        .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtPassLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                            .addComponent(txtUserLogin)))
-                    .addComponent(btnLogin))
-                .addContainerGap(55, Short.MAX_VALUE))
+                        .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlLoginLayout.createSequentialGroup()
+                                .addComponent(txtPassLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 45, Short.MAX_VALUE))
+                            .addComponent(txtUserLogin))
+                        .addGap(10, 10, 10))
+                    .addGroup(pnlLoginLayout.createSequentialGroup()
+                        .addComponent(btnLogin)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         pnlLoginLayout.setVerticalGroup(
             pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,19 +117,22 @@ public class MainView extends javax.swing.JFrame {
                     .addComponent(txtPassLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addComponent(btnLogin)
-                .addContainerGap(257, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlRegister.setBorder(javax.swing.BorderFactory.createTitledBorder("Didn't have an account? Register here"));
         pnlRegister.setForeground(new java.awt.Color(255, 255, 255));
 
         lblNama.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblNama.setForeground(new java.awt.Color(255, 255, 255));
         lblNama.setText("Nama");
 
         lblAlamat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAlamat.setForeground(new java.awt.Color(255, 255, 255));
         lblAlamat.setText("Alamat");
 
         lblPassReg.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPassReg.setForeground(new java.awt.Color(255, 255, 255));
         lblPassReg.setText("Password");
 
         btnRegister.setText("Register");
@@ -156,7 +164,7 @@ public class MainView extends javax.swing.JFrame {
                                 .addComponent(lblPassReg)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtPassReg, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 235, Short.MAX_VALUE)))
+                        .addGap(0, 133, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlRegisterLayout.setVerticalGroup(
@@ -179,10 +187,6 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap(181, Short.MAX_VALUE))
         );
 
-        dskMaster.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dskMaster.setLayer(pnlLogin, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dskMaster.setLayer(pnlRegister, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
         javax.swing.GroupLayout dskMasterLayout = new javax.swing.GroupLayout(dskMaster);
         dskMaster.setLayout(dskMasterLayout);
         dskMasterLayout.setHorizontalGroup(
@@ -190,13 +194,13 @@ public class MainView extends javax.swing.JFrame {
             .addGroup(dskMasterLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnlLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(pnlRegister, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(dskMasterLayout.createSequentialGroup()
-                .addGap(262, 262, 262)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dskMasterLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(228, 228, 228))
         );
         dskMasterLayout.setVerticalGroup(
             dskMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,11 +208,14 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addGroup(dskMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlRegister, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(dskMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlRegister, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
+        dskMaster.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dskMaster.setLayer(pnlLogin, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dskMaster.setLayer(pnlRegister, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         pnlRegister.getAccessibleContext().setAccessibleName("Didn't have an acoount? Register here");
 
@@ -216,9 +223,7 @@ public class MainView extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(dskMaster, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(dskMaster)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -16,14 +16,14 @@ import java.util.List;
 public class PenulisBukuDAO {
 
     private final FunctionDAO fdao;
-    
+
     public PenulisBukuDAO(Connection connection) {
         this.fdao = new FunctionDAO(connection);
     }
-    
+
     public boolean insert(PenulisBuku pb) {
         return this.fdao.executeDML("INSERT INTO Penulis_Buku VALUES("
-                + pb.getBukuID().getId() + ",'" + pb.getPenulisId().getId()+ "')");
+                + pb.getBukuID() + ",'" + pb.getPenulisId() + "')");
     }
 
     public boolean delete(String bukuId) {
@@ -31,11 +31,19 @@ public class PenulisBukuDAO {
     }
 
     public List<Object[]> getAll() {
-        return this.fdao.getAll("SELECT * FROM Penulis_Buku");
+        return this.fdao.getAll("SELECT pb.buku_id, pb.penulis_id, b.judul, p.penulis, b.status "
+                + "FROM Penulis p JOIN Penulis_buku pb "
+                + "ON p.id = pb.penulis_id "
+                + "JOIN Buku b "
+                + " ON pb.buku_id = b.id");
     }
 
     public List<Object[]> getAllSort(String category, String sort) {
-        return this.fdao.getAll("SELECT * FROM Penulis_Buku ORDER BY " + category + " " + sort);
+        return this.fdao.getAll("SELECT pb.buku_id, pb.penulis_id, b.judul, p.penulis, b.status "
+                + "FROM Penulis p JOIN Penulis_buku pb "
+                + "ON p.id = pb.penulis_id "
+                + "JOIN Buku b "
+                + " ON pb.buku_id = b.id ORDER BY " + category + " " + sort);
     }
 
     public List<Object[]> search(String category, String data) {

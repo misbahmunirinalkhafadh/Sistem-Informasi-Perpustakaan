@@ -52,7 +52,9 @@ public class AdminView extends javax.swing.JInternalFrame {
         this.pbc = new PenulisBukuController(connection);
         this.viewProccess = new ViewProccess();
         //this.loadSearchComboBox();
-        //this.reset();
+        this.resetTrans();
+        this.resetBuku();
+        this.resetPenulis();
     }
 
     /**
@@ -94,8 +96,8 @@ public class AdminView extends javax.swing.JInternalFrame {
         lblPenulisInsertBuku = new javax.swing.JLabel();
         cmbPenulis = new javax.swing.JComboBox();
         txtIdBukuInsert = new javax.swing.JTextField();
-        lblJudulInsert = new javax.swing.JTextField();
-        lblTahunInsert = new javax.swing.JTextField();
+        txtJudulInsert = new javax.swing.JTextField();
+        txtTahunInsert = new javax.swing.JTextField();
         btnSaveBuku = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -108,7 +110,7 @@ public class AdminView extends javax.swing.JInternalFrame {
         lblDenda = new javax.swing.JLabel();
         txtWaktu = new javax.swing.JTextField();
         txtDenda = new javax.swing.JTextField();
-        tblSaveDenda = new javax.swing.JButton();
+        btnSaveDenda = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -263,7 +265,7 @@ public class AdminView extends javax.swing.JInternalFrame {
                             .addGroup(panelBukuLayout.createSequentialGroup()
                                 .addComponent(lblTahunBuku)
                                 .addGap(18, 18, 18)
-                                .addComponent(lblTahunInsert, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))
+                                .addComponent(txtTahunInsert, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))
                             .addGroup(panelBukuLayout.createSequentialGroup()
                                 .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblIdBukuInsertBuku)
@@ -271,7 +273,7 @@ public class AdminView extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtIdBukuInsert, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
-                                    .addComponent(lblJudulInsert))))
+                                    .addComponent(txtJudulInsert))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(10, 10, 10))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBukuLayout.createSequentialGroup()
@@ -289,11 +291,11 @@ public class AdminView extends javax.swing.JInternalFrame {
                 .addGap(12, 12, 12)
                 .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblJudulBuku)
-                    .addComponent(lblJudulInsert, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtJudulInsert, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTahunBuku)
-                    .addComponent(lblTahunInsert, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTahunInsert, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPenulisInsertBuku)
@@ -310,6 +312,11 @@ public class AdminView extends javax.swing.JInternalFrame {
         jLabel2.setText("Penulis");
 
         btnSavePenulis.setText("Save");
+        btnSavePenulis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSavePenulisActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -324,7 +331,7 @@ public class AdminView extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtIdPenulisInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 116, Short.MAX_VALUE))
+                        .addGap(0, 52, Short.MAX_VALUE))
                     .addComponent(txtPenulisInsert))
                 .addGap(10, 10, 10))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -353,7 +360,7 @@ public class AdminView extends javax.swing.JInternalFrame {
 
         lblDenda.setText("Denda");
 
-        tblSaveDenda.setText("Save");
+        btnSaveDenda.setText("Save");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -372,7 +379,7 @@ public class AdminView extends javax.swing.JInternalFrame {
                         .addComponent(txtDenda))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(tblSaveDenda)))
+                        .addComponent(btnSaveDenda)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -387,7 +394,7 @@ public class AdminView extends javax.swing.JInternalFrame {
                     .addComponent(lblDenda)
                     .addComponent(txtDenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tblSaveDenda)
+                .addComponent(btnSaveDenda)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -410,7 +417,7 @@ public class AdminView extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtFind, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -465,11 +472,23 @@ public class AdminView extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBukuActionPerformed
+        txtIdBukuInsert.setEnabled(true);
+        txtJudulInsert.setEnabled(true);
+        txtTahunInsert.setEnabled(true);
+        cmbPenulis.setEnabled(true);
+        btnSaveBuku.setEnabled(true);
         bindingTableBuku();
+        resetTrans();
+        resetPenulis();
     }//GEN-LAST:event_btnBukuActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        txtIdPenulisInsert.setEnabled(true);
+        txtPenulisInsert.setEnabled(true);
+        btnSavePenulis.setEnabled(true);
         bindingTablePenulis();
+        resetBuku();
+        resetTrans();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnDetailMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailMemberActionPerformed
@@ -477,12 +496,27 @@ public class AdminView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnDetailMemberActionPerformed
 
     private void btnDetailBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailBukuActionPerformed
+        resetTrans();
+        resetBuku();
+        resetPenulis();
         bindingTableDetailBuku();
     }//GEN-LAST:event_btnDetailBukuActionPerformed
 
     private void btnTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransActionPerformed
+        txtIdTrans.setEnabled(true);
+        txtIdBukuTrans.setEnabled(true);
+        txtIdMemberTrans.setEnabled(true);
+        txtTK.setEnabled(true);
+        txtTP.setEnabled(true);
+        btnSaveTrans.setEnabled(true);
         bindingTableTransBuku();
+        resetBuku();
+        resetPenulis();
     }//GEN-LAST:event_btnTransActionPerformed
+
+    private void btnSavePenulisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePenulisActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSavePenulisActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -491,6 +525,7 @@ public class AdminView extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnDetailMember;
     private javax.swing.JButton btnFind;
     private javax.swing.JButton btnSaveBuku;
+    private javax.swing.JButton btnSaveDenda;
     private javax.swing.JButton btnSavePenulis;
     private javax.swing.JButton btnSaveTrans;
     private javax.swing.JButton btnTrans;
@@ -508,18 +543,15 @@ public class AdminView extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblIdBukuInsertBuku;
     private javax.swing.JLabel lblIdTrans;
     private javax.swing.JLabel lblJudulBuku;
-    private javax.swing.JTextField lblJudulInsert;
     private javax.swing.JLabel lblPenulisInsertBuku;
     private javax.swing.JLabel lblRole;
     private javax.swing.JLabel lblTK;
     private javax.swing.JLabel lblTahunBuku;
-    private javax.swing.JTextField lblTahunInsert;
     private javax.swing.JLabel lblWaktu;
     private javax.swing.JLabel lbtTP;
     private javax.swing.JPanel panelBuku;
     private javax.swing.JPanel panelTrans;
     private javax.swing.JTable tblAdmin;
-    private javax.swing.JButton tblSaveDenda;
     private javax.swing.JTextField txtDenda;
     private javax.swing.JTextField txtFind;
     private javax.swing.JTextField txtIdBukuInsert;
@@ -527,9 +559,11 @@ public class AdminView extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtIdMemberTrans;
     private javax.swing.JTextField txtIdPenulisInsert;
     private javax.swing.JTextField txtIdTrans;
+    private javax.swing.JTextField txtJudulInsert;
     private javax.swing.JTextField txtPenulisInsert;
     private javax.swing.JTextField txtTK;
     private javax.swing.JTextField txtTP;
+    private javax.swing.JTextField txtTahunInsert;
     private javax.swing.JTextField txtWaktu;
     // End of variables declaration//GEN-END:variables
 
@@ -553,8 +587,59 @@ public class AdminView extends javax.swing.JInternalFrame {
         this.viewProccess.loadData(this, tblAdmin, headerDetailBuku,
                 this.pbc.bindingSort(categoriesDetailBuku[0], "asc"));
     }
-        public void bindingTableTransBuku() {
+
+    public void bindingTableTransBuku() {
         this.viewProccess.loadData(this, tblAdmin, headerTransBuku,
                 this.tbc.bindingSort(categoriesTransBuku[0], "asc"));
     }
+
+    public void resetTrans() {
+        //Transaksi
+        txtIdTrans.setEnabled(false);
+        txtIdBukuTrans.setEnabled(false);
+        txtIdMemberTrans.setEnabled(false);
+        txtTK.setEnabled(false);
+        txtTP.setEnabled(false);
+        btnSaveTrans.setEnabled(false);
+    }
+
+    //Buku
+    public void resetBuku() {
+        txtIdBukuInsert.setEnabled(false);
+        txtJudulInsert.setEnabled(false);
+        txtTahunInsert.setEnabled(false);
+        cmbPenulis.setEnabled(false);
+        btnSaveBuku.setEnabled(false);
+    }
+
+    public void resetPenulis() {
+        txtIdPenulisInsert.setEnabled(false);
+        txtPenulisInsert.setEnabled(false);
+        btnSavePenulis.setEnabled(false);
+        
+    }
+    
+        public void saveOrEditPenulis(String id, String penulis, boolean isSave) {
+        boolean flag = false;
+        if (isSave) {
+            flag = this.penulisController.save(id,penulis);
+        } else {
+            flag = this.penulisController.edit(id, penulis);
+        }
+        this.viewProccess.saveData(this, flag, isSave);
+        this.resetPenulis();
+    }
+    
+//    public void resetDenda(){
+//        txtWaktu.setEnabled(false);
+//        txtDenda.setEnabled(false);
+//        btnSaveDenda.setEnabled(false);
+//    }
+
+//        txtId.setEditable(false);
+//        txtId.setText(this.regionController.getAutoId());
+//        txtName.setText("");
+//        txtSearch.setText("");
+//        this.bindingTable();
+//        btnDrop.setEnabled(false);
 }

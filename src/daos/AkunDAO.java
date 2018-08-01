@@ -20,16 +20,22 @@ public class AkunDAO {
     public AkunDAO(Connection connection) {
         this.fdao = new FunctionDAO(connection);
     }
-    
-    public boolean insert(Akun akun){
-        return this.fdao.executeDML("insert into akun values ('"+akun.getId()+"','"
-                +akun.getNama()+"','"+akun.getAlamat()+"','"+akun.getRoleId().getId()+"','"+akun.getPassword()+"')");
+
+    public boolean insert(Akun akun) {
+        return this.fdao.executeDML(
+                "");
+                
+//                "INSERT INTO Akun VALUES("
+//                + akun.getId() + ",'" + akun.getNama() + ",'" + akun.getAlamat()
+//                + ",'" + akun.getPassword()
+//                + ",'" + akun.getRoleId()
+//                + "')");
     }
 
     public boolean update(Akun akun) {
         return this.fdao.executeDML("UPDATE Akun SET nama='"
                 + akun.getNama() + "', alamat'" + akun.getAlamat()
-                + "', role_id'" + akun.getRoleId().getId()
+                + "', role_id'" + akun.getRoleId()
                 + "', password'" + akun.getPassword()
                 + " WHERE id=" + akun.getId());
     }
