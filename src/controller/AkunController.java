@@ -6,6 +6,7 @@
 package controller;
 
 import daos.AkunDAO;
+import daos.RoleDAO;
 import entities.Akun;
 import entities.Role;
 import java.sql.Connection;
@@ -18,17 +19,19 @@ import java.util.List;
 public class AkunController {
 
     private final AkunDAO adao;
+        private final RoleDAO roleDAO;
 
     public AkunController(Connection connection) {
         this.adao = new AkunDAO(connection);
+                this.roleDAO = new RoleDAO(connection);
     }
 
-    public boolean save(String id, String nama, String alamat, String password, int roleId) {
-        return this.adao.insert(new Akun(id, nama, alamat, password, roleId));
+    public boolean save(String id, String nama, String alamat, String roleId, String password) {
+        return this.adao.insert(new Akun(id, nama, alamat, new Role(roleId, ""), password));
     }
 
-    public boolean edit(String id, String nama, String alamat, String password, Role roleId) {
-        return this.adao.update(new Akun(id, nama, alamat, password, roleId));
+    public boolean edit(String id, String nama, String alamat, String roleId, String password) {
+        return this.adao.update(new Akun(id, nama, alamat, new Role(roleId, ""), password));
     }
 
     public boolean drop(String akunId) {
@@ -51,7 +54,4 @@ public class AkunController {
         return this.adao.getById(akunId);
     }
 
-    public String getAutoId() {
-        return this.adao.getAutoId();
-    }
 }

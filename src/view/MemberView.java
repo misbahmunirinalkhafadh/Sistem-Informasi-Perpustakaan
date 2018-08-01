@@ -25,6 +25,7 @@ public class MemberView extends javax.swing.JInternalFrame {
     private final String[] categoriesDetailBuku;
     private final String[] categoriesTransBuku;
     private final ViewProccess viewProccess;
+    int stat;
 
     /**
      * Creates new form MemberView
@@ -71,6 +72,12 @@ public class MemberView extends javax.swing.JInternalFrame {
             }
         ));
         jScrollPane1.setViewportView(tblMember);
+
+        cmbCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCategoryActionPerformed(evt);
+            }
+        });
 
         btnFind.setText("Cari");
 
@@ -132,12 +139,26 @@ public class MemberView extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDetailBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailBukuActionPerformed
+        stat = 1;
+        loadSearchComboBoxBuku();
         bindingTableDetailBuku();
     }//GEN-LAST:event_btnDetailBukuActionPerformed
 
     private void btnTransaksiBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransaksiBukuActionPerformed
+        stat = 2;
+        loadSearchComboBoxTransaksi();
         bindingTableTransBuku();
     }//GEN-LAST:event_btnTransaksiBukuActionPerformed
+
+    private void cmbCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCategoryActionPerformed
+        if (stat == 1){
+           this.searchTableBuku(this.viewProccess.getCategory(this.categoriesDetailBuku, cmbCategory), txtSearch.getText()); 
+        }
+        else if (stat ==2){
+            this.searchTableTransaksi(this.viewProccess.getCategory(this.categoriesTransBuku, cmbCategory), txtSearch.getText()); 
+        } else
+        resetCombo();
+    }//GEN-LAST:event_cmbCategoryActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -159,5 +180,27 @@ public class MemberView extends javax.swing.JInternalFrame {
         this.viewProccess.loadData(this, tblMember, headerTransBuku,
                 this.tbc.bindingSort(categoriesTransBuku[0], "asc"));
     }
+    
+    public void searchTableBuku(String category, String data) {
+        this.viewProccess.loadData(this, tblMember, headerDetailBuku,
+                this.pbc.find(category, data));
+    }
 
+    public void loadSearchComboBoxBuku() {
+        this.viewProccess.loadSearchComboBox(cmbCategory, headerDetailBuku);
+    }
+    
+        public void searchTableTransaksi(String category, String data) {
+        this.viewProccess.loadData(this, tblMember, headerTransBuku,
+                this.tbc.find(category, data));
+    }
+
+    public void loadSearchComboBoxTransaksi() {
+        this.viewProccess.loadSearchComboBox(cmbCategory, headerTransBuku);
+    }
+    
+    public void resetCombo(){
+        cmbCategory.removeAllItems();
+        stat = 0;
+    }
 }

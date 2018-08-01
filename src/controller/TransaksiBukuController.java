@@ -4,10 +4,13 @@
  * and open the template in the editor.
  */
 package controller;
-
+import daos.AkunDAO;
+import daos.BukuDAO;
 import daos.TransaksiBukuDAO;
-import entities.Transaksi;
+import daos.TransaksiDAO;
+import entities.Akun;
 import entities.Buku;
+import entities.Transaksi;
 import entities.TransaksiBuku;
 import java.sql.Connection;
 import java.util.List;
@@ -19,13 +22,24 @@ import java.util.List;
 public class TransaksiBukuController {
 
     private final TransaksiBukuDAO tbdao;
+    private BukuDAO bukuDAO;
+    private TransaksiDAO transaksiDAO;
+    private Akun akun;
+    private AkunDAO akunDAO;
 
     public TransaksiBukuController(Connection connection) {
         this.tbdao = new TransaksiBukuDAO(connection);
+        this.bukuDAO = new BukuDAO(connection);
+        this.transaksiDAO = new TransaksiDAO(connection);
+        this.akunDAO = new AkunDAO(connection);
     }
 
-    public boolean save(Transaksi transId, Buku bukuId) {
-        return this.tbdao.insert(new TransaksiBuku(transId, bukuId));
+    public boolean save(String transaksiId, String bukuId) {
+        return this.tbdao.insert(new TransaksiBuku(new Transaksi(transaksiId, 
+                java.sql.Date.valueOf(""), 
+                java.sql.Date.valueOf(""), 
+                0, 0, 0, akun), 
+                new Buku(bukuId, "", "", 0)));
     }
 
     public boolean drop(String tranId) {

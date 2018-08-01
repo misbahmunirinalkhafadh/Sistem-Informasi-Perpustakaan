@@ -14,10 +14,13 @@ public class Akun {
     private String id;
     private String nama;
     private String alamat;
-    private int roleId;
+    private Role roleId;
     private String password;
 
-    public Akun(String id, String nama, String alamat, String password, int roleId) {
+    public Akun() {
+    }
+
+    public Akun(String id, String nama, String alamat, Role roleId, String password) {
         this.id = id;
         this.nama = nama;
         this.alamat = alamat;
@@ -43,7 +46,7 @@ public class Akun {
         return alamat;
     }
 
-    public int getRoleId() {
+    public Role getRoleId() {
         return roleId;
     }
 
@@ -59,7 +62,7 @@ public class Akun {
         this.alamat = alamat;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(Role roleId) {
         this.roleId = roleId;
     }
 
