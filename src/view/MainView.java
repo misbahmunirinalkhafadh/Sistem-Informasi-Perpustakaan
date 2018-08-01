@@ -245,7 +245,7 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        this.viewProccess.callForm(dskMaster, new AdminView(connection));
+        this.viewProccess.callForm(dskMaster, new MemberView(connection));
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**

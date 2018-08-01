@@ -5,17 +5,37 @@
  */
 package view;
 
+import controller.AkunController;
+import controller.BukuController;
+import controller.PenulisController;
+import controller.PenulisBukuController;
+import controller.TransaksiBukuController;
+import java.sql.Connection;
+
 /**
  *
- * @author Sammy Guergachi <sguergachi at gmail.com>
+ * @author Dayinta Warih Wulandari
  */
 public class MemberView extends javax.swing.JInternalFrame {
+
+    private final PenulisBukuController pbc;
+    private final TransaksiBukuController tbc;
+    private final String[] headerDetailBuku = {"ID Buku", "ID Penulis", "Judul", "Penulis", "Status"};
+    private final String[] headerTransBuku = {"ID Transaksi", "ID Akun", "Nama", "Judul", "Tgl Pinjam", "Tgl Kembali", "Status", "Terlambat", "Denda"};
+    private final String[] categoriesDetailBuku;
+    private final String[] categoriesTransBuku;
+    private final ViewProccess viewProccess;
 
     /**
      * Creates new form MemberView
      */
-    public MemberView() {
+    public MemberView(Connection connection) {
         initComponents();
+        this.categoriesDetailBuku = new String[]{"buku_id", "penulis_id", "judul", "penulis", "status"};
+        this.categoriesTransBuku = new String[]{"transaksi_id", "id", "nama", "judul", "Tgl tanggal_pinjam", "tanggal_kembali", "status", "terlambat", "denda"};
+        this.tbc = new TransaksiBukuController(connection);
+        this.pbc = new PenulisBukuController(connection);
+        this.viewProccess = new ViewProccess();
     }
 
     /**
@@ -28,14 +48,18 @@ public class MemberView extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        cmbCategory = new javax.swing.JComboBox<>();
+        tblMember = new javax.swing.JTable();
+        cmbCategory = new javax.swing.JComboBox<String>();
         btnFind = new javax.swing.JButton();
         btnTransaksiBuku = new javax.swing.JButton();
-        btnDetailMember = new javax.swing.JButton();
+        btnDetailBuku = new javax.swing.JButton();
         txtSearch = new javax.swing.JTextField();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+
+        tblMember.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -46,16 +70,21 @@ public class MemberView extends javax.swing.JInternalFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblMember);
 
         btnFind.setText("Cari");
 
         btnTransaksiBuku.setText("Transaksi Buku");
-
-        btnDetailMember.setText("Detail Member");
-        btnDetailMember.addActionListener(new java.awt.event.ActionListener() {
+        btnTransaksiBuku.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDetailMemberActionPerformed(evt);
+                btnTransaksiBukuActionPerformed(evt);
+            }
+        });
+
+        btnDetailBuku.setText(" Buku");
+        btnDetailBuku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetailBukuActionPerformed(evt);
             }
         });
 
@@ -75,7 +104,7 @@ public class MemberView extends javax.swing.JInternalFrame {
                         .addComponent(btnFind))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnDetailMember)
+                        .addComponent(btnDetailBuku)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnTransaksiBuku)))
                 .addContainerGap())
@@ -92,7 +121,7 @@ public class MemberView extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDetailMember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDetailBuku, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnTransaksiBuku, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(36, 36, 36))
         );
@@ -100,18 +129,33 @@ public class MemberView extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnDetailMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailMemberActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDetailMemberActionPerformed
+    private void btnDetailBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailBukuActionPerformed
+        bindingTableDetailBuku();
+    }//GEN-LAST:event_btnDetailBukuActionPerformed
+
+    private void btnTransaksiBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransaksiBukuActionPerformed
+        bindingTableTransBuku();
+    }//GEN-LAST:event_btnTransaksiBukuActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDetailMember;
+    private javax.swing.JButton btnDetailBuku;
     private javax.swing.JButton btnFind;
     private javax.swing.JButton btnTransaksiBuku;
     private javax.swing.JComboBox<String> cmbCategory;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblMember;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
+
+    public void bindingTableDetailBuku() {
+        this.viewProccess.loadData(this, tblMember, headerDetailBuku,
+                this.pbc.bindingSort(categoriesDetailBuku[0], "asc"));
+    }
+
+    public void bindingTableTransBuku() {
+        this.viewProccess.loadData(this, tblMember, headerTransBuku,
+                this.tbc.bindingSort(categoriesTransBuku[0], "asc"));
+    }
+
 }
