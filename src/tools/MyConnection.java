@@ -23,7 +23,7 @@ public class MyConnection {
             ods.setPortNumber(1521);
 //            ods.setDatabaseName("HR");
             ods.setUser("system");
-            ods.setPassword("bismillah");
+            ods.setPassword("misbah10");
             connect = ods.getConnection();
             connect.createStatement()
                     .execute("alter session set " + "current_schema=Perpustakaan");
