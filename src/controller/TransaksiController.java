@@ -44,15 +44,16 @@ public class TransaksiController {
     }
     
     /**
-     * Fungsi untuk melakukan Edit data
-     * @param id
-     * @param tglPinjam
-     * @param tglKembali
-     * @param akunId
-     * @param stat
-     * @param terlambat
-     * @param denda
-     * @return 
+     * fungsi untuk mengubah data 
+     * @param id id data yang akan dirubah 
+     * @param tglPinjam tanggal pinjam transaksi 
+     * @param tglKembali tanggal kembali transaksi 
+     * @param akunId akun id peminjam 
+     * @param stat status buku 
+     * @param terlambat terlambat pengembalian buku
+     * @param denda besar denda 
+     * @return memanggil method update dari class TransaksiDAO dengan parameter membuat instance dari kelas Transaksi
+     * dimana instance tersebut berisi id, tglPinjam, tglKembali, akunId, stat, terlambat, denda
      */
     public boolean edit(String id, String tglPinjam, String tglKembali, String akunId, String stat, String terlambat, String denda){
         return this.tdao.update(new Transaksi(id, tglPinjam,
@@ -60,46 +61,46 @@ public class TransaksiController {
     }
     
     /**
-     * 
-     * @param transId
-     * @return 
+     * fungsi untuk menghapus data 
+     * @param transId variable untuk menghapus data 
+     * @return memanggil fungsi delete
      */
     public boolean drop(String transId){
         return this.tdao.delete(transId);
     }
     
     /**
-     * 
-     * @return 
+     * fungsi untuk menampilkan semua data 
+     * @return memanggil funsi getAll
      */
     public List<Object[]> binding(){
         return this.tdao.getAll();
     }
     
     /**
-     * 
-     * @param category
-     * @param sort
-     * @return 
+     * fungsi untuk menampilkan data secara terurut
+     * @param category golongan data 
+     * @param sort variable untuk menampilkan data 
+     * @return memanggil fungsi getAllSort
      */
     public List<Object[]> bindingSort(String category, String sort){
         return this.tdao.getAllSort(category, sort);
     }
     
     /**
-     * 
-     * @param category
-     * @param data
-     * @return 
+     * fungsi untuk mencari data 
+     * @param category golongan data 
+     * @param data variable data yang dicari
+     * @return memanggil fungsi search
      */
     public List<Object[]> find(String category, String data){
         return this.tdao.search(category, data);
     }
     
     /**
-     * 
-     * @param transId
-     * @return 
+     * fungsi untuk mencari data berdasarkan veriable tertentu
+     * @param transId variable untuk mencari data 
+     * @return memanggil fungsi getById
      */
     public Object findById(String transId){
         return this.tdao.getById(transId);

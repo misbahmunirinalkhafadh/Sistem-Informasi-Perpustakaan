@@ -70,18 +70,39 @@ public class AkunDAO {
      * fungsi untuk menampilkan semua data 
      * @return memanggil fungsi getAll dari class FunctionDAO dengan parameter query untuk menampilkan data
      */
+    /**
+     * fungsi untuk menampilkan semua data 
+     * @return memanggil fungsi getAll dari class FunctionDAO dengan parameter query untuk menampilkan data
+     */
     public List<Object[]> getAll() {
         return this.fdao.getAll("SELECT * FROM Akun");
     }
 
+    /**
+     * fungsi untuk menampilkan semua data dengan sorting
+     * @param category variable untuk mengurutkan data
+     * @param sort jenis sortir
+     * @return memanggil fungsi getAll dari class FunctionDAO dengan parameter query untuk menampilkan data
+     */
     public List<Object[]> getAllSort(String category, String sort) {
         return this.fdao.getAll("SELECT * FROM Akun ORDER BY " + category + " " + sort);
     }
 
+    /**
+     * fungsi untuk menampilkan beberapa data 
+     * @param category variable untuk menampilkan data 
+     * @param data keyword pencarian 
+     * @return memanggil fungsi getAll dari class FunctionDAO dengan parameter query search
+     */
     public List<Object[]> search(String category, String data) {
         return this.fdao.getAll("SELECT * FROM Akun WHERE REGEXP_LIKE (" + category + ", '" + data + "', 'i') ORDER BY id ASC");
     }
 
+    /**
+     * fungsi untuk menampilkan data berdasarkan ID
+     * @param akunId variable untuk menampilkan data 
+     * @return memanggil fungsi getDataByID dengan query
+     */
     public Object getById(String akunId) {
         return this.fdao.getDataByID("SELECT * FROM Akun WHERE id=" + akunId);
     }

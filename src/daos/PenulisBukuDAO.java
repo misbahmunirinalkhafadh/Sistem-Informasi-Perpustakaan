@@ -30,6 +30,12 @@ public class PenulisBukuDAO {
         this.fdao = new FunctionDAO(connection);
     }
 
+    /**
+     * Fungsi untuk menambah data 
+     * @param buku variable untuk menambah data
+     * @param penulis variable untuk menambah data
+     * @return memanggil fungsi prepareCall 
+     */
     public boolean insert(Buku buku, Penulis penulis) {
         try {
             CallableStatement cs = connection.prepareCall("{CALL tambahBuku(?,?,?)}");
@@ -44,15 +50,29 @@ public class PenulisBukuDAO {
         return false;
     }
     
+    /**
+     * Fungsi untuk menambah data penulis buku
+     * @param pb variable untuk menambah data 
+     * @return memanggil fungsi executeDML dari class FunctionDAO dengan parameter query insert 
+     */
     public boolean insertPenulisBuku(PenulisBuku pb){
                 return this.fdao.executeDML("INSERT INTO Penulis_buku VALUES('"
                 + pb.getBukuID() + "', '" + pb.getPenulisId() + "')");
     }
 
+    /**
+     * Fungsi untuk menghapus data 
+     * @param bukuId variable untuk menghapus data 
+     * @return memanggil fungsi executeDML dari class FunctionDAO dengan parameter query delete
+     */
     public boolean delete(String bukuId) {
         return this.fdao.executeDML("DELETE FROM Penulis_Buku WHERE buku_id=" + bukuId);
     }
 
+    /**
+     * fungsi untuk menampilkan semua data
+     * @return memanggil fungsi getAll dari class FunctionDAO dengan parameter query untuk menampilkan data
+     */
     public List<Object[]> getAll() {
         return this.fdao.getAll("SELECT pb.buku_id, pb.penulis_id, b.judul, p.penulis, b.status "
                 + "FROM Penulis p JOIN Penulis_buku pb "
@@ -61,6 +81,12 @@ public class PenulisBukuDAO {
                 + " ON pb.buku_id = b.id");
     }
 
+    /**
+     * Fungsi untuk menampilkan semua data dengan sorting
+     * @param category data akan diurutkan berdasarkan variabel ini
+     * @param sort jenis sortir
+     * @return memanggil fungsi getAll dari class FunctionDAO dengan parameter query untuk menampilkan data
+     */
     public List<Object[]> getAllSort(String category, String sort) {
         return this.fdao.getAll("SELECT pb.buku_id, pb.penulis_id, b.judul, p.penulis, b.status "
                 + "FROM Penulis p JOIN Penulis_buku pb "
@@ -69,6 +95,12 @@ public class PenulisBukuDAO {
                 + " ON pb.buku_id = b.id ORDER BY " + category + " " + sort);
     }
 
+    /**
+     * Fungsi untuk menampilkan beberapa data / search
+     * @param category data akan dicari dari kategori ini
+     * @param data keyword pencarian
+     * @return memanggil fungsi getAll dari class FunctionDAO dengan parameter query search
+     */
     public List<Object[]> search(String category, String data) {
         return this.fdao.getAll("SELECT pb.buku_id, pb.penulis_id, b.judul, p.penulis, b.status "
                 + "FROM Penulis p JOIN Penulis_buku pb "
@@ -76,5 +108,4 @@ public class PenulisBukuDAO {
                 + "JOIN Buku b "
                 + " ON pb.buku_id = b.id WHERE REGEXP_LIKE("+category+", '" + data + "','i')");
     }
-
 }
