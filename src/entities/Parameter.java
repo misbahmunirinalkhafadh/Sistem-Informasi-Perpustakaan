@@ -18,6 +18,7 @@ public class Parameter {
         this.waktu = waktu;
         this.denda = denda;
     }
+    
 
 
     /**

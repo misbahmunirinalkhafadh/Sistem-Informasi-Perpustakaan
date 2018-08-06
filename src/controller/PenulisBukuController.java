@@ -3,8 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package controller;
+
 import daos.BukuDAO;
 import daos.PenulisBukuDAO;
 import daos.PenulisDAO;
@@ -13,25 +13,30 @@ import entities.Penulis;
 import entities.PenulisBuku;
 import java.sql.Connection;
 import java.util.List;
+
 /**
- * 
+ *
  * @author Dayinta Warih Wulandari
  */
 public class PenulisBukuController {
 
+    private PenulisDAO pdao;
     private final PenulisBukuDAO pbdao;
     private final PenulisDAO penulisDAO;
     private final BukuDAO bukuDAO;
 
- public PenulisBukuController(Connection connection) {
+    public PenulisBukuController(Connection connection) {
         this.pbdao = new PenulisBukuDAO(connection);
         this.bukuDAO = new BukuDAO(connection);
         this.penulisDAO = new PenulisDAO(connection);
     }
     
-    public boolean save(String bukuId, String penulisBukuId) {
-        return this.pbdao.insert(new PenulisBuku(new Buku(bukuId, "", "", 0), 
-                new Penulis(penulisBukuId, "")));
+    public boolean save(String judul, String thn, String penulis) {
+        return this.pbdao.insert(new Buku(judul, thn), new Penulis("", penulis));
+    }
+    
+    public boolean savePenulisBuku(String idPenulis, String idTrans) {
+        return this.pbdao.insertPenulisBuku(new PenulisBuku(idPenulis, idTrans));
     }
 
     public boolean drop(String bukuId) {

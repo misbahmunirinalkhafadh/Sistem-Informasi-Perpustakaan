@@ -28,6 +28,11 @@ public class AkunDAO {
         this.fdao = new FunctionDAO(connection);
     }
 
+    /**
+     * fungsi untuk insert data 
+     * @param akun instance dari class Akun
+     * @return  memanggil fungsi prepareCall dengan query untuk insert
+     */
     public boolean insert(Akun akun) {
         try {
             CallableStatement cs = connection.prepareCall("{CALL tambahAkun(?,?,?)}");
@@ -42,16 +47,29 @@ public class AkunDAO {
         return false;
     }
 
+    /**
+     * fungsi untuk update data
+     * @param akun instance dari class Akun
+     * @return memanggil fungsi executeDML dari class FunctionDAO dengan parameter query untuk update
+     */
     public boolean update(Akun akun) {
         return this.fdao.executeDML("UPDATE Akun SET nama='"
-                + akun.getNama() + "', alamat='" + akun.getAlamat() + "', password='"
-                + akun.getPassword() + " WHERE id=" + akun.getId());
+                + akun.getNama() + "', alamat='" + akun.getAlamat() + "' WHERE id='" + akun.getId()+"'");
     }
 
+     /**
+     * fungsi untuk menghapus data
+     * @param akunId id dari data yang ingin di hapus
+     * @return memanggil fungsi executeDML dari class FunctionDAO dengan parameter query hapus
+     */
     public boolean delete(String akunId) {
-        return this.fdao.executeDML("DELETE FROM Akun WHERE id=" + akunId);
+        return this.fdao.executeDML("DELETE FROM Akun WHERE id='" + akunId+"'");
     }
 
+    /**
+     * fungsi untuk menampilkan semua data 
+     * @return memanggil fungsi getAll dari class FunctionDAO dengan parameter query untuk menampilkan data
+     */
     public List<Object[]> getAll() {
         return this.fdao.getAll("SELECT * FROM Akun");
     }
@@ -61,7 +79,7 @@ public class AkunDAO {
     }
 
     public List<Object[]> search(String category, String data) {
-        return this.fdao.getAll("SELECT * FROM Akun WHERE " + category + " LIKE '%" + data + "%'");
+        return this.fdao.getAll("SELECT * FROM Akun WHERE REGEXP_LIKE (" + category + ", '" + data + "', 'i') ORDER BY id ASC");
     }
 
     public Object getById(String akunId) {

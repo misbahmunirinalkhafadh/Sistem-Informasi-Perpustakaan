@@ -17,13 +17,14 @@ import java.util.List;
 public class PenulisController {
 
     private final PenulisDAO penulisDAO;
+    private Connection connection;
 
     public PenulisController(Connection connection) {
         this.penulisDAO = new PenulisDAO(connection);
     }
 
-    public boolean save(String id, String penulis) {
-        return this.penulisDAO.insert(new Penulis(id, penulis));
+    public boolean save(String penulis) {
+        return this.penulisDAO.insert(new Penulis(penulis));
     }
 
     public boolean edit(String id, String penulis) {

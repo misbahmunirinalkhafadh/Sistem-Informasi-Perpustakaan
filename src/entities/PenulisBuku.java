@@ -12,41 +12,46 @@ import entities.Penulis;
  * @author Dayinta Warih Wulandari
  */
 public class PenulisBuku {
-    private Buku bukuID;
-    private Penulis penulisId;
+    private String bukuID;
+    private String penulisId;
 
-    public PenulisBuku(Buku bukuID, Penulis penulisId) {
+    public PenulisBuku() {
+    }
+
+    public PenulisBuku(String bukuID, String penulisId) {
         this.bukuID = bukuID;
         this.penulisId = penulisId;
     }
 
-    
+    public PenulisBuku(Penulis penulis) {
+        this.penulisId = penulisId;
+    }
     
     /**
      * @return the bukuID
      */
-    public Buku getBukuID() {
+    public String getBukuID() {
         return bukuID;
     }
 
     /**
      * @param bukuID the bukuID to set
      */
-    public void setBukuID(Buku bukuID) {
+    public void setBukuID(String bukuID) {
         this.bukuID = bukuID;
     }
 
     /**
      * @return the penulisId
      */
-    public Penulis getPenulisId() {
+    public String getPenulisId() {
         return penulisId;
     }
 
     /**
      * @param penulisId the penulisId to set
      */
-    public void setPenulisId(Penulis penulisId) {
+    public void setPenulisId(String penulisId) {
         this.penulisId = penulisId;
     }
     

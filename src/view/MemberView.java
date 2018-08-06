@@ -10,6 +10,7 @@ import controller.BukuController;
 import controller.PenulisController;
 import controller.PenulisBukuController;
 import controller.TransaksiBukuController;
+import entities.Session;
 import java.sql.Connection;
 
 /**
@@ -18,27 +19,32 @@ import java.sql.Connection;
  */
 public class MemberView extends javax.swing.JInternalFrame {
 
+    MainView mv = new MainView();
     private final PenulisBukuController pbc;
     private final TransaksiBukuController tbc;
     private final String[] headerDetailBuku = {"ID Buku", "ID Penulis", "Judul", "Penulis", "Status"};
     private final String[] headerTransBuku = {"ID Transaksi", "ID Akun", "Nama", "Judul", "Tgl Pinjam", "Tgl Kembali", "Status", "Terlambat", "Denda"};
     private final String[] categoriesDetailBuku;
     private final String[] categoriesTransBuku;
+    private final Session session;
     private final ViewProccess viewProccess;
-    int stat;
-
+    private final MainView mainView;
+    int stat = 0;
+    String nama ="";
     /**
      * Creates new form MemberView
      */
     public MemberView(Connection connection) {
+        initComponents();
         this.categoriesDetailBuku = new String[]{"buku_id", "penulis_id", "judul", "penulis", "status"};
         this.categoriesTransBuku = new String[]{"transaksi_id", "id", "nama", "judul", "Tgl tanggal_pinjam", "tanggal_kembali", "status", "terlambat", "denda"};
-        
-        initComponents();
         this.tbc = new TransaksiBukuController(connection);
         this.pbc = new PenulisBukuController(connection);
         this.viewProccess = new ViewProccess();
-    }
+        this.session = new Session();
+        this.mainView = new MainView();
+        labeluser.setText("Welcome "+ session.getLogin());
+   }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,11 +57,13 @@ public class MemberView extends javax.swing.JInternalFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMember = new javax.swing.JTable();
-        cmbCategory = new javax.swing.JComboBox<>();
+        cmbCategory = new javax.swing.JComboBox<String>();
         btnFind = new javax.swing.JButton();
         btnTransaksiBuku = new javax.swing.JButton();
         btnDetailBuku = new javax.swing.JButton();
         txtSearch = new javax.swing.JTextField();
+        labeluser = new javax.swing.JLabel();
+        btnLogout = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -81,6 +89,11 @@ public class MemberView extends javax.swing.JInternalFrame {
         });
 
         btnFind.setText("Cari");
+        btnFind.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFindActionPerformed(evt);
+            }
+        });
 
         btnTransaksiBuku.setText("Transaksi Buku");
         btnTransaksiBuku.addActionListener(new java.awt.event.ActionListener() {
@@ -96,6 +109,21 @@ public class MemberView extends javax.swing.JInternalFrame {
             }
         });
 
+        labeluser.setText("jLabel1");
+        labeluser.addHierarchyListener(new java.awt.event.HierarchyListener() {
+            public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
+                labeluserHierarchyChanged(evt);
+            }
+        });
+
+        btnLogout.setBackground(new java.awt.Color(255, 0, 51));
+        btnLogout.setText("LOGOUT");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -103,20 +131,21 @@ public class MemberView extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnDetailBuku)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnTransaksiBuku))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnFind)))))
+                        .addComponent(btnLogout)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDetailBuku)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnTransaksiBuku))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(labeluser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnFind)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -126,13 +155,15 @@ public class MemberView extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnFind)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labeluser))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDetailBuku, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnTransaksiBuku, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnTransaksiBuku, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLogout))
                 .addGap(36, 36, 36))
         );
 
@@ -152,22 +183,40 @@ public class MemberView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnTransaksiBukuActionPerformed
 
     private void cmbCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCategoryActionPerformed
-        if (stat == 1){
-           this.searchTableBuku(this.viewProccess.getCategory(this.categoriesDetailBuku, cmbCategory), txtSearch.getText()); 
+        if (stat == 1) {
+            this.searchTableBuku(this.viewProccess.getCategory(this.categoriesDetailBuku, cmbCategory), txtSearch.getText());
+        } else if (stat == 2) {
+            this.searchTableTransaksi(this.viewProccess.getCategory(this.categoriesTransBuku, cmbCategory), txtSearch.getText());
         }
-        else if (stat ==2){
-            this.searchTableTransaksi(this.viewProccess.getCategory(this.categoriesTransBuku, cmbCategory), txtSearch.getText()); 
-        } else
-        resetCombo();
     }//GEN-LAST:event_cmbCategoryActionPerformed
+
+    private void labeluserHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_labeluserHierarchyChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_labeluserHierarchyChanged
+
+    private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
+        if (stat == 1) {
+            this.searchTableBuku(this.viewProccess.getCategory(this.categoriesDetailBuku, cmbCategory), txtSearch.getText());
+        } else if (stat == 2) {
+            this.searchTableTransaksi(this.viewProccess.getCategory(this.categoriesTransBuku, cmbCategory), txtSearch.getText());
+        }
+    }//GEN-LAST:event_btnFindActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        MainView mv = new MainView();
+        mv.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDetailBuku;
     private javax.swing.JButton btnFind;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnTransaksiBuku;
     private javax.swing.JComboBox<String> cmbCategory;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labeluser;
     private javax.swing.JTable tblMember;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
@@ -178,10 +227,12 @@ public class MemberView extends javax.swing.JInternalFrame {
     }
 
     public void bindingTableTransBuku() {
+        nama = session.getLogin();
+        System.out.println("nama = "+nama);
         this.viewProccess.loadData(this, tblMember, headerTransBuku,
-                this.tbc.bindingSort(categoriesTransBuku[0], "asc"));
+                this.tbc.bindingSort(categoriesTransBuku[0], "asc", nama));
     }
-    
+
     public void searchTableBuku(String category, String data) {
         this.viewProccess.loadData(this, tblMember, headerDetailBuku,
                 this.pbc.find(category, data));
@@ -190,8 +241,8 @@ public class MemberView extends javax.swing.JInternalFrame {
     public void loadSearchComboBoxBuku() {
         this.viewProccess.loadSearchComboBox(cmbCategory, headerDetailBuku);
     }
-    
-        public void searchTableTransaksi(String category, String data) {
+
+    public void searchTableTransaksi(String category, String data) {
         this.viewProccess.loadData(this, tblMember, headerTransBuku,
                 this.tbc.find(category, data));
     }
@@ -199,9 +250,17 @@ public class MemberView extends javax.swing.JInternalFrame {
     public void loadSearchComboBoxTransaksi() {
         this.viewProccess.loadSearchComboBox(cmbCategory, headerTransBuku);
     }
-    
-    public void resetCombo(){
+
+    public void resetCombo() {
         cmbCategory.removeAllItems();
         stat = 0;
     }
+
+//    public void labeluser() {
+//        labeluser.setText("Halo, " + mv.nama);
+//    }
+//    public void searchTableBuku(String category, String data) {
+//        this.viewProccess.loadData(this, tblMember, headerDetailBuku,
+//                this.regionController.find(category, data));
+//    }
 }

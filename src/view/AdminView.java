@@ -10,7 +10,15 @@ import controller.BukuController;
 import controller.PenulisController;
 import controller.PenulisBukuController;
 import controller.TransaksiBukuController;
+import controller.ParameterController;
+import entities.Parameter;
+import entities.Session;
 import java.sql.Connection;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,43 +26,59 @@ import java.sql.Connection;
  */
 public class AdminView extends javax.swing.JInternalFrame {
 
+    private final Connection connection;
     private final AkunController akunController;
     private final BukuController bukuController;
     private final PenulisController penulisController;
     private final PenulisBukuController pbc;
     private final TransaksiBukuController tbc;
+    private final ParameterController pc;
     private final ViewProccess viewProccess;
     private final String[] headerBuku = {"ID Buku", "Judul", "Tahun", "Status"};
     private final String[] headerPenulis = {"ID Penulis", "Penulis"};
     private final String[] headerAkun = {"ID Member", "Nama", "Alamat"};
-    private final String[] headerDetailBuku = {"ID Buku", "ID Penulis", "Judul", "Penulis", "Status"};
+    private final String[] headerDetailBuku = {"ID Buku", "Penulis", "Judul", "Penulis", "Status"};
     private final String[] headerTransBuku = {"ID Transaksi", "ID Akun", "Nama", "Judul", "Tgl Pinjam", "Tgl Kembali", "Status", "Terlambat", "Denda"};
     private final String[] categoriesAkun;
     private final String[] categoriesBuku;
     private final String[] categoriesPenulis;
     private final String[] categoriesDetailBuku;
     private final String[] categoriesTransBuku;
+    int temp = 0;
+    private final List<Object[]> penulisTemp;
+    private final Session session;
+    private final MainView mainView;
 
     /**
      * Creates new form AdminView
      */
     public AdminView(Connection connection) {
+        this.connection = connection;
         this.categoriesAkun = new String[]{"id", "nama", "alamat"};
         this.categoriesBuku = new String[]{"id", "judul", "tahun", "status"};
         this.categoriesPenulis = new String[]{"id", "penulis"};
-        this.categoriesDetailBuku = new String[]{"buku_id", "penulis_id", "judul", "penulis", "status"};
+        this.categoriesDetailBuku = new String[]{"buku_id", "penulis", "judul", "penulis", "status"};
         this.categoriesTransBuku = new String[]{"transaksi_id", "id", "nama", "judul", "Tgl tanggal_pinjam", "tanggal_kembali", "status", "terlambat", "denda"};
+
         initComponents();
         this.akunController = new AkunController(connection);
         this.bukuController = new BukuController(connection);
         this.penulisController = new PenulisController(connection);
         this.tbc = new TransaksiBukuController(connection);
         this.pbc = new PenulisBukuController(connection);
+        this.pc = new ParameterController(connection);
         this.viewProccess = new ViewProccess();
+        this.session = new Session();
         //this.loadSearchComboBox();
+//        this.ShowParameter();
         this.resetTrans();
         this.resetBuku();
         this.resetPenulis();
+        this.resetMember();
+        this.penulisTemp = this.getDataPenulis();
+        //this.loadPenulis();
+        this.mainView = new MainView();
+        lblRole.setText("Welcome " + session.getLogin());
     }
 
     /**
@@ -86,37 +110,55 @@ public class AdminView extends javax.swing.JInternalFrame {
         txtTK = new javax.swing.JTextField();
         lblIDAkunTrans = new javax.swing.JLabel();
         txtIdMemberTrans = new javax.swing.JTextField();
-        lblIdBuku = new javax.swing.JLabel();
-        txtIdBukuTrans = new javax.swing.JTextField();
+        lblJudulBukuTrans = new javax.swing.JLabel();
+        txtIdJudulBuku = new javax.swing.JTextField();
         btnSaveTrans = new javax.swing.JButton();
+        lblIdBuku = new javax.swing.JLabel();
+        txtIdBukuTransaksi = new javax.swing.JTextField();
+        btnEdit = new javax.swing.JButton();
         panelBuku = new javax.swing.JPanel();
         lblIdBukuInsertBuku = new javax.swing.JLabel();
         lblJudulBuku = new javax.swing.JLabel();
         lblTahunBuku = new javax.swing.JLabel();
-        lblPenulisInsertBuku = new javax.swing.JLabel();
-        cmbPenulis = new javax.swing.JComboBox();
         txtIdBukuInsert = new javax.swing.JTextField();
         txtJudulInsert = new javax.swing.JTextField();
         txtTahunInsert = new javax.swing.JTextField();
         btnSaveBuku = new javax.swing.JButton();
+        btnDropBuku = new javax.swing.JButton();
+        txtIdPenulis = new javax.swing.JTextField();
+        lblIdPenulis = new javax.swing.JLabel();
+        btnSaveDetailBuku = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtIdPenulisInsert = new javax.swing.JTextField();
         txtPenulisInsert = new javax.swing.JTextField();
         btnSavePenulis = new javax.swing.JButton();
+        btnDropPenulis = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         lblWaktu = new javax.swing.JLabel();
         lblDenda = new javax.swing.JLabel();
         txtWaktu = new javax.swing.JTextField();
         txtDenda = new javax.swing.JTextField();
         btnSaveDenda = new javax.swing.JButton();
+        cekdenda = new javax.swing.JButton();
+        panel = new javax.swing.JPanel();
+        lblIDMember = new javax.swing.JLabel();
+        lblNamaMember = new javax.swing.JLabel();
+        lblAlamatMember = new javax.swing.JLabel();
+        txtIdMember = new javax.swing.JTextField();
+        txtNama = new javax.swing.JTextField();
+        txtAlamatMember = new javax.swing.JTextField();
+        btnEditMember = new javax.swing.JButton();
+        btnDropMember = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         setTitle("Admin");
+        setAutoscrolls(true);
         setVisible(true);
 
         tblAdmin.setModel(new javax.swing.table.DefaultTableModel(
@@ -130,6 +172,11 @@ public class AdminView extends javax.swing.JInternalFrame {
 
             }
         ));
+        tblAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblAdminMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblAdmin);
 
         lblRole.setText("jLabel1");
@@ -192,9 +239,23 @@ public class AdminView extends javax.swing.JInternalFrame {
 
         lblIDAkunTrans.setText("ID Member");
 
-        lblIdBuku.setText("ID Buku");
+        lblJudulBukuTrans.setText("Judul Buku");
 
         btnSaveTrans.setText("Save");
+        btnSaveTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveTransActionPerformed(evt);
+            }
+        });
+
+        lblIdBuku.setText("ID Buku");
+
+        btnEdit.setText("Sudah Dikembalikan");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelTransLayout = new javax.swing.GroupLayout(panelTrans);
         panelTrans.setLayout(panelTransLayout);
@@ -202,33 +263,41 @@ public class AdminView extends javax.swing.JInternalFrame {
             panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTransLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelTransLayout.createSequentialGroup()
-                        .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblIdTrans, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblIDAkunTrans, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblIdBuku, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbtTP, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTransLayout.createSequentialGroup()
-                        .addComponent(lblTK)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelTransLayout.createSequentialGroup()
-                        .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtIdBukuTrans, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
-                            .addComponent(txtIdMemberTrans, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtIdTrans, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(btnEdit, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                        .addGap(71, 71, 71)
+                        .addComponent(btnSaveTrans)
+                        .addGap(9, 9, 9))
                     .addGroup(panelTransLayout.createSequentialGroup()
-                        .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtTK, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
-                            .addComponent(txtTP))
-                        .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTransLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSaveTrans)
-                .addContainerGap())
+                        .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(panelTransLayout.createSequentialGroup()
+                                    .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lblIdTrans, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblIDAkunTrans, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblJudulBukuTrans, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lbtTP, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addGap(18, 18, 18))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTransLayout.createSequentialGroup()
+                                    .addComponent(lblTK)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(lblIdBuku))
+                        .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelTransLayout.createSequentialGroup()
+                                .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtIdTrans, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                    .addComponent(txtIdMemberTrans))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(panelTransLayout.createSequentialGroup()
+                                .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtTK, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtTP, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtIdJudulBuku)
+                                    .addGroup(panelTransLayout.createSequentialGroup()
+                                        .addComponent(txtIdBukuTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addContainerGap())))))
         );
         panelTransLayout.setVerticalGroup(
             panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,8 +312,8 @@ public class AdminView extends javax.swing.JInternalFrame {
                     .addComponent(txtIdMemberTrans, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblIdBuku)
-                    .addComponent(txtIdBukuTrans, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblJudulBukuTrans)
+                    .addComponent(txtIdJudulBuku, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,8 +323,14 @@ public class AdminView extends javax.swing.JInternalFrame {
                     .addComponent(txtTK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTK))
                 .addGap(18, 18, 18)
-                .addComponent(btnSaveTrans)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblIdBuku)
+                    .addComponent(txtIdBukuTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addGroup(panelTransLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSaveTrans)
+                    .addComponent(btnEdit))
+                .addContainerGap())
         );
 
         panelBuku.setBorder(javax.swing.BorderFactory.createTitledBorder("Buku"));
@@ -266,15 +341,34 @@ public class AdminView extends javax.swing.JInternalFrame {
 
         lblTahunBuku.setText("Tahun");
 
-        lblPenulisInsertBuku.setText("Penulis");
-
         txtTahunInsert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTahunInsertActionPerformed(evt);
             }
         });
 
-        btnSaveBuku.setText("Save");
+        btnSaveBuku.setText("Save Buku");
+        btnSaveBuku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveBukuActionPerformed(evt);
+            }
+        });
+
+        btnDropBuku.setText("Drop");
+        btnDropBuku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDropBukuActionPerformed(evt);
+            }
+        });
+
+        lblIdPenulis.setText("ID Penulis");
+
+        btnSaveDetailBuku.setText("Save Detail");
+        btnSaveDetailBuku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveDetailBukuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelBukuLayout = new javax.swing.GroupLayout(panelBuku);
         panelBuku.setLayout(panelBukuLayout);
@@ -284,29 +378,34 @@ public class AdminView extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelBukuLayout.createSequentialGroup()
-                        .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelBukuLayout.createSequentialGroup()
-                                .addComponent(lblJudulBuku)
-                                .addGap(37, 37, 37)
-                                .addComponent(txtJudulInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelBukuLayout.createSequentialGroup()
-                                .addComponent(lblIdBukuInsertBuku)
-                                .addGap(25, 25, 25)
-                                .addComponent(txtIdBukuInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 48, Short.MAX_VALUE))
+                        .addComponent(lblIdBukuInsertBuku)
+                        .addGap(25, 25, 25)
+                        .addComponent(txtIdBukuInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(panelBukuLayout.createSequentialGroup()
                         .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTahunBuku)
-                            .addComponent(lblPenulisInsertBuku))
-                        .addGap(29, 29, 29)
-                        .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbPenulis, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtTahunInsert))))
-                .addGap(10, 10, 10))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBukuLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnSaveBuku)
-                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBukuLayout.createSequentialGroup()
+                                .addComponent(lblJudulBuku)
+                                .addGap(37, 37, 37)
+                                .addComponent(txtJudulInsert))
+                            .addGroup(panelBukuLayout.createSequentialGroup()
+                                .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelBukuLayout.createSequentialGroup()
+                                        .addComponent(lblTahunBuku)
+                                        .addGap(32, 32, 32)
+                                        .addComponent(txtTahunInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelBukuLayout.createSequentialGroup()
+                                        .addComponent(lblIdPenulis)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtIdPenulis, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(panelBukuLayout.createSequentialGroup()
+                                .addComponent(btnSaveDetailBuku)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
+                                .addComponent(btnDropBuku)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnSaveBuku)))
+                        .addContainerGap())))
         );
         panelBukuLayout.setVerticalGroup(
             panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,12 +422,15 @@ public class AdminView extends javax.swing.JInternalFrame {
                 .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTahunBuku)
                     .addComponent(txtTahunInsert, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
-                .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPenulisInsertBuku)
-                    .addComponent(cmbPenulis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btnSaveBuku)
+                .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblIdPenulis)
+                    .addComponent(txtIdPenulis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDropBuku)
+                    .addComponent(btnSaveBuku)
+                    .addComponent(btnSaveDetailBuku))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -342,6 +444,13 @@ public class AdminView extends javax.swing.JInternalFrame {
         btnSavePenulis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSavePenulisActionPerformed(evt);
+            }
+        });
+
+        btnDropPenulis.setText("Drop");
+        btnDropPenulis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDropPenulisActionPerformed(evt);
             }
         });
 
@@ -363,9 +472,11 @@ public class AdminView extends javax.swing.JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(txtIdPenulisInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 131, Short.MAX_VALUE))))
+                                .addGap(0, 38, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnDropPenulis)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSavePenulis)))
                 .addContainerGap())
         );
@@ -381,7 +492,9 @@ public class AdminView extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtPenulisInsert))
                 .addGap(18, 18, 18)
-                .addComponent(btnSavePenulis, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSavePenulis, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDropPenulis))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -391,7 +504,20 @@ public class AdminView extends javax.swing.JInternalFrame {
 
         lblDenda.setText("Denda");
 
+        txtWaktu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtWaktuActionPerformed(evt);
+            }
+        });
+
         btnSaveDenda.setText("Save");
+
+        cekdenda.setText("cek");
+        cekdenda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cekdendaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -400,19 +526,18 @@ public class AdminView extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnSaveDenda))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblWaktu)
-                            .addComponent(lblDenda))
-                        .addGap(42, 42, 42)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(txtWaktu, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txtDenda))))
+                    .addComponent(lblWaktu)
+                    .addComponent(lblDenda))
+                .addGap(42, 42, 42)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtWaktu, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                    .addComponent(txtDenda))
+                .addGap(10, 10, 10))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cekdenda)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSaveDenda)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -426,10 +551,93 @@ public class AdminView extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblDenda)
                     .addComponent(txtDenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSaveDenda)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSaveDenda)
+                    .addComponent(cekdenda))
+                .addContainerGap())
         );
+
+        panel.setBorder(javax.swing.BorderFactory.createTitledBorder("Member"));
+
+        lblIDMember.setText("ID Member");
+
+        lblNamaMember.setText("Nama");
+
+        lblAlamatMember.setText("Alamat");
+
+        btnEditMember.setText("Edit");
+        btnEditMember.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditMemberActionPerformed(evt);
+            }
+        });
+
+        btnDropMember.setText("Drop");
+        btnDropMember.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDropMemberActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setHorizontalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addComponent(lblAlamatMember)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addComponent(lblNamaMember)
+                        .addGap(43, 43, 43)
+                        .addComponent(txtNama))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addComponent(lblIDMember)
+                        .addGap(18, 18, 18)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtAlamatMember)
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addComponent(txtIdMember, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addGap(0, 19, Short.MAX_VALUE)
+                                .addComponent(btnDropMember)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEditMember)))))
+                .addContainerGap())
+        );
+        panelLayout.setVerticalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblIDMember)
+                    .addComponent(txtIdMember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNamaMember)
+                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAlamatMember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblAlamatMember))
+                .addGap(18, 18, 18)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEditMember)
+                    .addComponent(btnDropMember))
+                .addContainerGap(32, Short.MAX_VALUE))
+        );
+
+        btnLogout.setBackground(new java.awt.Color(255, 0, 0));
+        btnLogout.setText("LOGOUT");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -439,31 +647,38 @@ public class AdminView extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(panelTrans, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(panelBuku, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(41, 41, 41))))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(lblRole, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtFind, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnFind))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(panelTrans, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnBuku, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnDetailBuku, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnTrans, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
                             .addComponent(btnDetailMember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(panelBuku, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1))))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -475,78 +690,110 @@ public class AdminView extends javax.swing.JInternalFrame {
                     .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtFind, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnFind))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnBuku)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnDetailBuku)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnTrans)
-                        .addGap(20, 20, 20)
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnDetailMember)))
-                .addGap(18, 18, 18)
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnBuku)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDetailBuku)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnTrans)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnDetailMember))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLogout))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(panelBuku, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelTrans, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBukuActionPerformed
+        temp = 1;
+        loadSearchComboBoxBuku();
         txtIdBukuInsert.setEnabled(true);
+        txtIdBukuInsert.setEditable(false);
         txtJudulInsert.setEnabled(true);
         txtTahunInsert.setEnabled(true);
-        cmbPenulis.setEnabled(true);
+        //cmbPenulis.setEnabled(true);
         btnSaveBuku.setEnabled(true);
         bindingTableBuku();
         resetTrans();
         resetPenulis();
+        resetMember();
     }//GEN-LAST:event_btnBukuActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        temp = 3;
+        loadSearchComboBoxPenulis();
         txtIdPenulisInsert.setEnabled(true);
+        txtIdPenulisInsert.setEditable(false);
         txtPenulisInsert.setEnabled(true);
         btnSavePenulis.setEnabled(true);
         bindingTablePenulis();
         resetBuku();
         resetTrans();
+        resetMember();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnDetailMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailMemberActionPerformed
+        temp = 5;
+        loadSearchComboBoxDetailMember();
+        txtIdMember.setEnabled(true);
+        txtIdMember.setEditable(false);
+        txtNama.setEnabled(true);
+        txtAlamatMember.setEnabled(true);
+        btnEditMember.setEnabled(true);
         bindingTableMember();
+        resetBuku();
+        resetTrans();
+        resetPenulis();
     }//GEN-LAST:event_btnDetailMemberActionPerformed
 
     private void btnDetailBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailBukuActionPerformed
+        temp = 4;
+        loadSearchComboBoxDetailBuku();
         resetTrans();
         resetBuku();
         resetPenulis();
+        resetMember();
         bindingTableDetailBuku();
     }//GEN-LAST:event_btnDetailBukuActionPerformed
 
     private void btnTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransActionPerformed
+        temp = 2;
+        loadSearchComboBoxTrasaksi();
         txtIdTrans.setEnabled(true);
-        txtIdBukuTrans.setEnabled(true);
+        txtIdTrans.setEditable(false);
+        txtIdJudulBuku.setEnabled(true);
+        txtIdJudulBuku.setEditable(false);
         txtIdMemberTrans.setEnabled(true);
+        txtIdBukuTransaksi.setEnabled(true);
         txtTK.setEnabled(true);
         txtTP.setEnabled(true);
         btnSaveTrans.setEnabled(true);
         bindingTableTransBuku();
         resetBuku();
         resetPenulis();
+        resetMember();
     }//GEN-LAST:event_btnTransActionPerformed
 
     private void btnSavePenulisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePenulisActionPerformed
-        // TODO add your handling code here:
+        this.saveOrEditPenulis(txtPenulisInsert.getText(), txtIdPenulisInsert.isEnabled());
+        bindingTablePenulis();
     }//GEN-LAST:event_btnSavePenulisActionPerformed
 
     private void txtTahunInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTahunInsertActionPerformed
@@ -554,55 +801,151 @@ public class AdminView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtTahunInsertActionPerformed
 
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
-        // TODO add your handling code here:
+        if (temp == 1) {
+            this.searchTableBuku(this.viewProccess.getCategory(this.categoriesBuku, cmbCategory), txtFind.getText());
+        } else if (temp == 2) {
+            this.searchTableTransaksi(this.viewProccess.getCategory(this.categoriesTransBuku, cmbCategory), txtFind.getText());
+        } else if (temp == 3) {
+            this.searchTablePenulis(this.viewProccess.getCategory(this.categoriesPenulis, cmbCategory), txtFind.getText());
+        } else if (temp == 4) {
+            this.searchTableDetailBuku(this.viewProccess.getCategory(this.categoriesDetailBuku, cmbCategory), txtFind.getText());
+        } else if (temp == 5) {
+            this.searchTableDetailMember(this.viewProccess.getCategory(this.categoriesAkun, cmbCategory), txtFind.getText());
+        }
     }//GEN-LAST:event_btnFindActionPerformed
 
     private void cmbCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCategoryActionPerformed
-        // TODO add your handling code here:
+//        if (temp == 1) {
+//            this.searchTableBuku(this.viewProccess.getCategory(this.categoriesBuku, cmbCategory), txtFind.getText());
+//        } else if (temp == 2) {
+//            this.searchTableTransaksi(this.viewProccess.getCategory(this.categoriesTransBuku, cmbCategory), txtFind.getText());
+//        } else if (temp == 3) {
+//            this.searchTablePenulis(this.viewProccess.getCategory(this.categoriesPenulis, cmbCategory), txtFind.getText());
+//        } else if (temp == 4) {
+//            this.searchTableDetailBuku(this.viewProccess.getCategory(this.categoriesDetailBuku, cmbCategory), txtFind.getText());
+//        } else if (temp == 5) {
+//            this.searchTableDetailMember(this.viewProccess.getCategory(this.categoriesAkun, cmbCategory), txtFind.getText());
+//        }
     }//GEN-LAST:event_cmbCategoryActionPerformed
+
+    private void tblAdminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAdminMouseClicked
+        this.mouseClicked(tblAdmin.getSelectedRow());
+    }//GEN-LAST:event_tblAdminMouseClicked
+
+    private void txtWaktuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtWaktuActionPerformed
+
+
+    }//GEN-LAST:event_txtWaktuActionPerformed
+
+    private void btnDropPenulisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDropPenulisActionPerformed
+        this.dropPenulis(txtIdPenulisInsert.getText());
+        bindingTablePenulis();
+    }//GEN-LAST:event_btnDropPenulisActionPerformed
+
+    private void btnDropMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDropMemberActionPerformed
+        this.dropMember(txtIdMember.getText());
+        bindingTableMember();
+    }//GEN-LAST:event_btnDropMemberActionPerformed
+
+    private void btnEditMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditMemberActionPerformed
+        this.editMember(txtNama.getText(), txtAlamatMember.getText());
+        bindingTableMember();
+    }//GEN-LAST:event_btnEditMemberActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        MainView mv = new MainView();
+        mv.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnSaveTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveTransActionPerformed
+        this.saveTransaksi(txtIdMemberTrans.getText(), txtIdBukuTransaksi.getText(), txtTP.getText(), txtTK.getText());
+        bindingTableTransBuku();
+    }//GEN-LAST:event_btnSaveTransActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        this.editTransaksi(txtIdTrans.getText());
+        bindingTableTransBuku();
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnSaveBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveBukuActionPerformed
+        this.viewProccess.saveData(this, this.pbc.save(txtJudulInsert.getText(), txtTahunInsert.getText(), txtIdPenulis.getText()), true);
+    }//GEN-LAST:event_btnSaveBukuActionPerformed
+
+    private void btnDropBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDropBukuActionPerformed
+        this.dropBuku(txtIdBukuInsert.getText());
+        bindingTableBuku();
+    }//GEN-LAST:event_btnDropBukuActionPerformed
+
+    private void cekdendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cekdendaActionPerformed
+        // TODO add your handling code here:
+        ShowParameter();
+
+    }//GEN-LAST:event_cekdendaActionPerformed
+
+    private void btnSaveDetailBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveDetailBukuActionPerformed
+        this.viewProccess.saveData(this, this.pbc.savePenulisBuku(txtIdBukuInsert.getText(), txtIdPenulis.getText()), true);
+    }//GEN-LAST:event_btnSaveDetailBukuActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuku;
     private javax.swing.JButton btnDetailBuku;
     private javax.swing.JButton btnDetailMember;
+    private javax.swing.JButton btnDropBuku;
+    private javax.swing.JButton btnDropMember;
+    private javax.swing.JButton btnDropPenulis;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnEditMember;
     private javax.swing.JButton btnFind;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnSaveBuku;
     private javax.swing.JButton btnSaveDenda;
+    private javax.swing.JButton btnSaveDetailBuku;
     private javax.swing.JButton btnSavePenulis;
     private javax.swing.JButton btnSaveTrans;
     private javax.swing.JButton btnTrans;
+    private javax.swing.JButton cekdenda;
     private javax.swing.JComboBox cmbCategory;
-    private javax.swing.JComboBox cmbPenulis;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblAlamatMember;
     private javax.swing.JLabel lblDenda;
     private javax.swing.JLabel lblIDAkunTrans;
+    private javax.swing.JLabel lblIDMember;
     private javax.swing.JLabel lblIdBuku;
     private javax.swing.JLabel lblIdBukuInsertBuku;
+    private javax.swing.JLabel lblIdPenulis;
     private javax.swing.JLabel lblIdTrans;
     private javax.swing.JLabel lblJudulBuku;
-    private javax.swing.JLabel lblPenulisInsertBuku;
+    private javax.swing.JLabel lblJudulBukuTrans;
+    private javax.swing.JLabel lblNamaMember;
     private javax.swing.JLabel lblRole;
     private javax.swing.JLabel lblTK;
     private javax.swing.JLabel lblTahunBuku;
     private javax.swing.JLabel lblWaktu;
     private javax.swing.JLabel lbtTP;
+    private javax.swing.JPanel panel;
     private javax.swing.JPanel panelBuku;
     private javax.swing.JPanel panelTrans;
     private javax.swing.JTable tblAdmin;
+    private javax.swing.JTextField txtAlamatMember;
     private javax.swing.JTextField txtDenda;
     private javax.swing.JTextField txtFind;
     private javax.swing.JTextField txtIdBukuInsert;
-    private javax.swing.JTextField txtIdBukuTrans;
+    private javax.swing.JTextField txtIdBukuTransaksi;
+    private javax.swing.JTextField txtIdJudulBuku;
+    private javax.swing.JTextField txtIdMember;
     private javax.swing.JTextField txtIdMemberTrans;
+    private javax.swing.JTextField txtIdPenulis;
     private javax.swing.JTextField txtIdPenulisInsert;
     private javax.swing.JTextField txtIdTrans;
     private javax.swing.JTextField txtJudulInsert;
+    private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtPenulisInsert;
     private javax.swing.JTextField txtTK;
     private javax.swing.JTextField txtTP;
@@ -633,16 +976,17 @@ public class AdminView extends javax.swing.JInternalFrame {
 
     public void bindingTableTransBuku() {
         this.viewProccess.loadData(this, tblAdmin, headerTransBuku,
-                this.tbc.bindingSort(categoriesTransBuku[0], "asc"));
+                this.tbc.binding());
     }
 
     public void resetTrans() {
         //Transaksi
         txtIdTrans.setEnabled(false);
-        txtIdBukuTrans.setEnabled(false);
+        txtIdJudulBuku.setEnabled(false);
         txtIdMemberTrans.setEnabled(false);
         txtTK.setEnabled(false);
         txtTP.setEnabled(false);
+        txtIdBukuTransaksi.setEnabled(false);
         btnSaveTrans.setEnabled(false);
     }
 
@@ -651,38 +995,205 @@ public class AdminView extends javax.swing.JInternalFrame {
         txtIdBukuInsert.setEnabled(false);
         txtJudulInsert.setEnabled(false);
         txtTahunInsert.setEnabled(false);
-        cmbPenulis.setEnabled(false);
+        //cmbPenulis.setEnabled(false);
         btnSaveBuku.setEnabled(false);
+        btnDropBuku.setEnabled(false);
     }
 
     public void resetPenulis() {
         txtIdPenulisInsert.setEnabled(false);
         txtPenulisInsert.setEnabled(false);
         btnSavePenulis.setEnabled(false);
-        
+        btnDropPenulis.setEnabled(false);
     }
-    
-        public void saveOrEditPenulis(String id, String penulis, boolean isSave) {
+
+    public void resetMember() {
+        txtIdMember.setEnabled(false);
+        txtNama.setEnabled(false);
+        txtAlamatMember.setEnabled(false);
+        btnEditMember.setEnabled(false);
+        btnDropMember.setEnabled(false);
+    }
+
+    public void saveOrEditPenulis(String penulis, boolean isSave) {
+        String id = txtIdPenulisInsert.getText();
         boolean flag = false;
         if (isSave) {
-            flag = this.penulisController.save(id,penulis);
+            flag = this.penulisController.save(penulis);
         } else {
             flag = this.penulisController.edit(id, penulis);
         }
         this.viewProccess.saveData(this, flag, isSave);
         this.resetPenulis();
     }
-    
-//    public void resetDenda(){
-//        txtWaktu.setEnabled(false);
-//        txtDenda.setEnabled(false);
-//        btnSaveDenda.setEnabled(false);
-//    }
 
-//        txtId.setEditable(false);
-//        txtId.setText(this.regionController.getAutoId());
-//        txtName.setText("");
-//        txtSearch.setText("");
-//        this.bindingTable();
-//        btnDrop.setEnabled(false);
+    public void saveTransaksi(String akunId, String idBuku, String tglp, String tglk) {
+        //String idTrans = txtIdPenulisInsert.getText();
+        //String idBuku = String.valueOf(this.tbc.getIdBuku(judulBuku));
+        //System.out.println(idBuku.toString());
+        boolean flag = this.tbc.save(akunId, idBuku, tglp, tglk);
+        String message = "Failed to save data...";
+        if (flag) {
+            message = "Success to save data...";
+        }
+        JOptionPane.showMessageDialog(this, message, "Notifications", JOptionPane.INFORMATION_MESSAGE);
+        bindingTableTransBuku();
+        this.resetTrans();
+    }
+    
+    public void editTransaksi(String idTrans) {
+        //String id = txtIdPenulisInsert.getText();
+        boolean flag = this.tbc.edit(idTrans);
+        String message = "Failed to update data...";
+        if (flag) {
+            message = "Success to update data...";
+        }
+        JOptionPane.showMessageDialog(this, message, "Notifications", JOptionPane.INFORMATION_MESSAGE);
+        bindingTableTransBuku();
+        this.resetTrans();
+    }
+
+    public void editMember(String nama, String alamat) {
+        String idMember = txtIdMember.getText();
+        String pass = "";
+        boolean flag = this.akunController.edit(idMember, nama, alamat, pass);
+        String message = "Failed to update data...";
+        if (flag) {
+            message = "Success to update data...";
+        }
+        JOptionPane.showMessageDialog(this, message, "Notifications", JOptionPane.INFORMATION_MESSAGE);
+        bindingTableMember();
+        this.resetMember();
+    }
+
+    public void mouseClicked(int row) {
+        if (temp == 1) {
+            //txtIdBukuInsert.setEnabled(true);
+            btnDropBuku.setEnabled(true);
+            txtIdBukuInsert.setText(tblAdmin.getValueAt(row, 0).toString());
+            txtJudulInsert.setText(tblAdmin.getValueAt(row, 1).toString());
+            txtTahunInsert.setText(tblAdmin.getValueAt(row, 2).toString());
+        } else if (temp == 2) {
+            txtIdJudulBuku.setEnabled(true);
+            txtIdTrans.setText(tblAdmin.getValueAt(row, 0).toString());
+            txtIdBukuTransaksi.setEnabled(false);
+            txtIdMemberTrans.setText(tblAdmin.getValueAt(row, 1).toString());
+            txtIdJudulBuku.setText(tblAdmin.getValueAt(row, 3).toString());
+            txtTP.setText(tblAdmin.getValueAt(row, 4).toString());
+            txtTK.setText(tblAdmin.getValueAt(row, 5).toString());
+        } else if (temp == 3) {
+            btnDropPenulis.setEnabled(true);
+            txtIdPenulisInsert.setEnabled(false);
+            txtIdPenulisInsert.setText(tblAdmin.getValueAt(row, 0).toString());
+            txtPenulisInsert.setText(tblAdmin.getValueAt(row, 1).toString());
+        } else if (temp == 5) {
+            btnDropMember.setEnabled(true);
+            txtIdMember.setEnabled(false);
+            txtIdMember.setText(tblAdmin.getValueAt(row, 0).toString());
+            txtNama.setText(tblAdmin.getValueAt(row, 1).toString());
+            txtAlamatMember.setText(tblAdmin.getValueAt(row, 2).toString());
+        }
+    }
+
+    public void ShowParameter() {
+        String idPar = "1";
+//       //System.out.println(pc.bindingWaktu(idPar).getWaktu());
+//      for (Parameter parameter : pc.bindingWaktu(idPar)) {
+//           Object[] region1 ={
+//                   region.getRegionId(),region.getRegionName()
+//                   };
+//           defaultTableModel.addRow(region1);
+//       }
+//      tableRegion.setModel(defaultTableModel);
+
+//        for (Object obj : pc.bindingWaktu()){
+//            System.out.println("YAYYYY");
+//            if (obj instanceof Object[]){
+//                System.out.println("YUPS");
+//                String[] parArray = (String[]) obj;
+//                System.out.println(Arrays.toString(parArray));
+//            }
+//        }
+//        System.out.println(pc.bindingWaktu("1").toString());
+        txtWaktu.setText(pc.bindingWaktu(idPar).toString());
+        txtDenda.setText(pc.bindingDenda(idPar).toString());
+    }
+
+    public void dropPenulis(String penulisId) {
+        if (this.viewProccess.dropConfirm(this)) {
+            this.viewProccess.dropData(this, this.penulisController.drop(penulisId));
+        }
+        this.resetPenulis();
+    }
+
+    public void dropMember(String memberId) {
+        if (this.viewProccess.dropConfirm(this)) {
+            this.viewProccess.dropData(this, this.akunController.drop(memberId));
+        }
+        this.resetMember();
+    }
+
+    private List<Object[]> getDataPenulis() {
+        return new PenulisController(connection).bindingSort("id", "asc");
+    }
+
+//    private void loadPenulis() {
+//        this.viewProccess.loadDetails(cmbPenulis, this.getDataPenulis(), 1);
+//    }
+//
+//    private String getPenulis() {
+//        return this.viewProccess.getIdfromComboBox(this.penulisTemp, cmbPenulis.getSelectedIndex());
+//    }
+    public void searchTableBuku(String category, String data) {
+        this.viewProccess.loadData(this, tblAdmin, headerBuku,
+                this.bukuController.find(category, data));
+    }
+
+    public void loadSearchComboBoxBuku() {
+        this.viewProccess.loadSearchComboBox(cmbCategory, headerBuku);
+    }
+
+    public void searchTableTransaksi(String category, String data) {
+        this.viewProccess.loadData(this, tblAdmin, headerTransBuku,
+                this.tbc.find(category, data));
+    }
+
+    public void loadSearchComboBoxTrasaksi() {
+        this.viewProccess.loadSearchComboBox(cmbCategory, headerTransBuku);
+    }
+
+    public void searchTablePenulis(String category, String data) {
+        this.viewProccess.loadData(this, tblAdmin, headerPenulis,
+                this.penulisController.find(category, data));
+    }
+
+    public void loadSearchComboBoxPenulis() {
+        this.viewProccess.loadSearchComboBox(cmbCategory, headerPenulis);
+    }
+
+    public void searchTableDetailBuku(String category, String data) {
+        this.viewProccess.loadData(this, tblAdmin, headerDetailBuku,
+                this.pbc.find(category, data));
+    }
+
+    public void loadSearchComboBoxDetailBuku() {
+        this.viewProccess.loadSearchComboBox(cmbCategory, headerDetailBuku);
+    }
+
+    public void searchTableDetailMember(String category, String data) {
+        this.viewProccess.loadData(this, tblAdmin, headerAkun,
+                this.akunController.find(category, data));
+    }
+
+    public void loadSearchComboBoxDetailMember() {
+        this.viewProccess.loadSearchComboBox(cmbCategory, headerAkun);
+    }
+
+    public void dropBuku(String bukuId) {
+        if (this.viewProccess.dropConfirm(this)) {
+            this.viewProccess.dropData(this, this.bukuController.drop(bukuId));
+        }
+        this.resetBuku();
+    }
+
 }

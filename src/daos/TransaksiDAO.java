@@ -53,7 +53,7 @@ public class TransaksiDAO {
     }
 
     public List<Object[]> search(String category, String data) {
-        return this.fdao.getAll("SELECT * FROM Transaksi WHERE " + category + " LIKE '%" + data + "%'");
+        return this.fdao.getAll("SELECT * FROM Transaksi WHERE REGEXP_LIKE(" + category + ", '" + data + "', 'i')");
     }
     
     public Object getById(String bukuId){

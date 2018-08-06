@@ -18,6 +18,11 @@ public class Penulis {
         this.id = id;
         this.penulis = penulis;
     }
+
+    public Penulis(String penulis) {
+        this.penulis = penulis;
+    }
+    
     
     /**
      * @return the id

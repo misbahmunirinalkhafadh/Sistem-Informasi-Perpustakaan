@@ -5,17 +5,31 @@
  */
 package view;
 
+import java.sql.Connection;
+import tools.MyConnection;
+import controller.AkunController;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author MUHAMMAD BIN ZANDRA
  */
 public class Registrasi extends javax.swing.JFrame {
 
+    private final Connection connection;
+    private final ViewProccess viewProccess;
+    private final AkunController akunController;
+
     /**
      * Creates new form Registrasi
      */
     public Registrasi() {
         initComponents();
+        this.connection = new MyConnection().getConnection();
+        this.viewProccess = new ViewProccess();
+        this.akunController = new AkunController(connection);
     }
 
     /**
@@ -37,6 +51,7 @@ public class Registrasi extends javax.swing.JFrame {
         txtAlamatReg = new javax.swing.JTextField();
         txtPassReg = new javax.swing.JPasswordField();
         btnRegister = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,6 +82,13 @@ public class Registrasi extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Cancel");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlRegisterLayout = new javax.swing.GroupLayout(pnlRegister);
         pnlRegister.setLayout(pnlRegisterLayout);
         pnlRegisterLayout.setHorizontalGroup(
@@ -86,7 +108,9 @@ public class Registrasi extends javax.swing.JFrame {
             .addGroup(pnlRegisterLayout.createSequentialGroup()
                 .addGap(86, 86, 86)
                 .addComponent(btnRegister)
-                .addGap(201, 201, 201))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlRegisterLayout.setVerticalGroup(
             pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,8 +128,10 @@ public class Registrasi extends javax.swing.JFrame {
                     .addComponent(lblPassReg)
                     .addComponent(txtPassReg, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btnRegister)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pnlRegisterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegister)
+                    .addComponent(jButton1))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -121,8 +147,8 @@ public class Registrasi extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel1)
                 .addGap(106, 106, 106)
-                .addComponent(pnlRegister, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pnlRegister, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -146,15 +172,22 @@ public class Registrasi extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        //        boolean flag = this.akunController.save(txtNamaReg.getText(), txtAlamatReg.getText(), txtPassReg.getPassword().toString());
-        //        String message = "Failed to save data...";
-        //        if (flag) {
-            //            message = "Success to save data...";
-            //        }
-        System.out.println(txtNamaReg.getText().length());
-        System.out.println(txtAlamatReg.getText().length());
-        System.out.println(txtPassReg.getPassword().toString().length());
+        String pass = String.valueOf(txtPassReg.getPassword());
+        boolean flag = this.akunController.save(txtNamaReg.getText(), txtAlamatReg.getText(), pass);
+        String message = "Failed to save data...";
+        if (flag) {
+            message = "Success to save data...";
+        }
+        JOptionPane.showMessageDialog(this, message, "Notifications", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnRegisterActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+
+        MainView mainView = new MainView();
+        mainView.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -193,6 +226,7 @@ public class Registrasi extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegister;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblAlamat;

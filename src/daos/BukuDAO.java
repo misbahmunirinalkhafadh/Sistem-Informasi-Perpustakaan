@@ -34,7 +34,7 @@ public class BukuDAO {
     }
 
     public boolean delete(String bukuId) {
-        return this.fdao.executeDML("DELETE FROM Buku WHERE id=" + bukuId);
+        return this.fdao.executeDML("DELETE FROM Buku WHERE id='" + bukuId+"'");
     }
 
     public List<Object[]> getAll() {
@@ -46,7 +46,7 @@ public class BukuDAO {
     }
 
     public List<Object[]> search(String category, String data) {
-        return this.fdao.getAll("SELECT * FROM Buku WHERE " + category + " LIKE '%" + data + "%'");
+        return this.fdao.getAll("SELECT * FROM Buku WHERE REGEXP_LIKE(" + category + ", '" + data + "' , 'i')");
     }
     
     public Object getById(String bukuId){

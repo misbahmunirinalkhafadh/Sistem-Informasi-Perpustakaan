@@ -14,14 +14,14 @@ import entities.Akun;
  */
 public class Transaksi {
     private String id;
-    private Date tanggalPinjam;
-    private Date tanggalKembali;
+    private String tanggalPinjam;
+    private String tanggalKembali;
     private int status_pinjam;
     private int terlambat;
     private int denda;
-    private Akun akunId;
+    private String akunId;
 
-    public Transaksi(String id, Date tanggalPinjam, Date tanggalKembali, int status_pinjam, int terlambat, int denda, Akun akunId) {
+    public Transaksi(String id, String tanggalPinjam, String tanggalKembali, int status_pinjam, int terlambat, int denda, String akunId) {
         this.id = id;
         this.tanggalPinjam = tanggalPinjam;
         this.tanggalKembali = tanggalKembali;
@@ -29,6 +29,16 @@ public class Transaksi {
         this.terlambat = terlambat;
         this.denda = denda;
         this.akunId = akunId;
+    }
+
+    public Transaksi(String akunId, String tanggalPinjam, String tanggalKembali) {
+        this.tanggalPinjam = tanggalPinjam;
+        this.tanggalKembali = tanggalKembali;
+        this.akunId = akunId;
+    }
+
+    public Transaksi(String id) {
+        this.id = id;
     }
     
     /**
@@ -48,28 +58,28 @@ public class Transaksi {
     /**
      * @return the tanggalPinjam
      */
-    public Date getTanggalPinjam() {
+    public String getTanggalPinjam() {
         return tanggalPinjam;
     }
 
     /**
      * @param tanggalPinjam the tanggalPinjam to set
      */
-    public void setTanggalPinjam(Date tanggalPinjam) {
+    public void setTanggalPinjam(String tanggalPinjam) {
         this.tanggalPinjam = tanggalPinjam;
     }
 
     /**
      * @return the tanggalKembali
      */
-    public Date getTanggalKembali() {
+    public String getTanggalKembali() {
         return tanggalKembali;
     }
 
     /**
      * @param tanggalKembali the tanggalKembali to set
      */
-    public void setTanggalKembali(Date tanggalKembali) {
+    public void setTanggalKembali(String tanggalKembali) {
         this.tanggalKembali = tanggalKembali;
     }
 
@@ -118,14 +128,14 @@ public class Transaksi {
     /**
      * @return the akunId
      */
-    public Akun getAkunId() {
+    public String getAkunId() {
         return akunId;
     }
 
     /**
      * @param akunId the akunId to set
      */
-    public void setAkunId(Akun akunId) {
+    public void setAkunId(String akunId) {
         this.akunId = akunId;
     }
     

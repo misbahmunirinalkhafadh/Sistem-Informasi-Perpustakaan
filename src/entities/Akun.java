@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entities;
+
 import entities.Role;
+
 /**
- * 
+ *
  * @author Dayinta Warih Wulandari
  */
 public class Akun {
+
     private String id;
     private String nama;
     private String alamat;
@@ -34,14 +36,26 @@ public class Akun {
         this.password = password;
     }
 
-    
-    
+    public Akun(String id, String nama, String alamat, String passeord) {
+        this.id = id;
+        this.nama = nama;
+        this.alamat = alamat;
+        this.password = passeord;
+    }
+
+    public Akun(String nama, String alamat) {
+        this.nama = nama;
+        this.alamat = alamat;
+    }
+
+    public Akun(String id) {
+        this.id = id;
+    }
+
     public Akun(String id, String nama, String alamat, String password, Role roleId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
-    
     public String getId() {
         return id;
     }
@@ -87,6 +101,5 @@ public class Akun {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
+
 }

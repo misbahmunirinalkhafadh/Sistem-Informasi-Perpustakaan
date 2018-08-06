@@ -42,7 +42,7 @@ public class RoleDAO {
     }
 
     public List<Object[]> search(String category, String data) {
-        return this.fdao.getAll("SELECT * FROM Role WHERE " + category + " LIKE '%" + data + "%'");
+        return this.fdao.getAll("SELECT * FROM Role WHERE REGEXP_LIKE(" + category + ", '" + data + "', 'i')");
     }
     
     public Object getById(String roleId){

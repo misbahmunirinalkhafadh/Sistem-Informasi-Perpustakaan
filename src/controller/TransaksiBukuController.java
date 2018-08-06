@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package controller;
+
 import daos.AkunDAO;
 import daos.BukuDAO;
 import daos.TransaksiBukuDAO;
@@ -13,7 +14,14 @@ import entities.Buku;
 import entities.Transaksi;
 import entities.TransaksiBuku;
 import java.sql.Connection;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,12 +42,16 @@ public class TransaksiBukuController {
         this.akunDAO = new AkunDAO(connection);
     }
 
-    public boolean save(String transaksiId, String bukuId) {
-        return this.tbdao.insert(new TransaksiBuku(new Transaksi(transaksiId, 
-                java.sql.Date.valueOf(""), 
-                java.sql.Date.valueOf(""), 
-                0, 0, 0, akun), 
-                new Buku(bukuId, "", "", 0)));
+    public boolean save(String idAkun, String idBuku, String tglP, String tglK) {
+        return this.tbdao.insert(new Transaksi(idAkun, tglP, tglK), new Akun(idAkun), new Buku(idBuku));
+    }
+
+    public boolean edit(String idt) {
+        return this.tbdao.edit(new Transaksi(idt));
+    }
+
+    public Object getIdBuku(String jdl) {
+        return this.tbdao.getId(jdl);
     }
 
     public boolean drop(String tranId) {
@@ -50,11 +62,16 @@ public class TransaksiBukuController {
         return this.tbdao.getAll();
     }
 
-    public List<Object[]> bindingSort(String category, String sort) {
-        return this.tbdao.getAllSort(category, sort);
+    public List<Object[]> bindingSort(String category, String sort, String nm) {
+        return this.tbdao.getAllSort(category, sort, nm);
     }
 
     public List<Object[]> find(String category, String data) {
         return this.tbdao.search(category, data);
     }
+
+    public Object findById(String transId) {
+        return this.tbdao.getById(transId);
+    }
+
 }

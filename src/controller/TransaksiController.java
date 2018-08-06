@@ -26,18 +26,14 @@ public class TransaksiController {
         this.tdao = new TransaksiDAO(connection);
     }
             
-    public boolean save(String id, String tglPinjam, String tglKembali, Akun akunId, String stat, String terlambat, String denda){
-        java.sql.Date date1 = java.sql.Date.valueOf(tglPinjam);
-        java.sql.Date date2 = java.sql.Date.valueOf(tglKembali);
-        return this.tdao.insert(new Transaksi(id, date1,
-                date2, Integer.parseInt(stat), Integer.parseInt(terlambat), Integer.parseInt(denda), akunId));
+    public boolean save(String id, String tglPinjam, String tglKembali, String akunId, String stat, String terlambat, String denda){
+        return this.tdao.insert(new Transaksi(id, tglPinjam,
+                tglKembali, Integer.parseInt(stat), Integer.parseInt(terlambat), Integer.parseInt(denda), akunId));
     }
     
-    public boolean edit(String id, String tglPinjam, String tglKembali, Akun akunId, String stat, String terlambat, String denda){
-                java.sql.Date date1 = java.sql.Date.valueOf(tglPinjam);
-        java.sql.Date date2 = java.sql.Date.valueOf(tglKembali);
-        return this.tdao.update(new Transaksi(id, date1,
-                date2, Integer.parseInt(stat), Integer.parseInt(terlambat), Integer.parseInt(denda), akunId));
+    public boolean edit(String id, String tglPinjam, String tglKembali, String akunId, String stat, String terlambat, String denda){
+        return this.tdao.update(new Transaksi(id, tglPinjam,
+                tglKembali, Integer.parseInt(stat), Integer.parseInt(terlambat), Integer.parseInt(denda), akunId));
     }
     
     public boolean drop(String transId){

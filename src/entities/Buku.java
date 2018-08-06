@@ -23,6 +23,26 @@ public class Buku {
         this.status = status;
     }
 
+    public Buku(String judul, String tahun) {
+        this.judul = judul;
+        this.tahun = tahun;
+    }
+    
+    public Buku(String judul, String tahun, int status) {
+        this.judul = judul;
+        this.tahun = tahun;
+        this.status = status;
+    }
+
+    public Buku() {
+        
+    }
+
+    public Buku(String id) {
+        this.id = id;
+    }
+    
+
     /**
      * @return the id
      */
