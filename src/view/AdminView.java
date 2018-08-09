@@ -423,9 +423,9 @@ public class AdminView extends javax.swing.JInternalFrame {
                     .addComponent(lblTahunBuku)
                     .addComponent(txtTahunInsert, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblIdPenulis)
-                    .addComponent(txtIdPenulis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtIdPenulis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblIdPenulis))
                 .addGap(40, 40, 40)
                 .addGroup(panelBukuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDropBuku)
@@ -1000,6 +1000,7 @@ public class AdminView extends javax.swing.JInternalFrame {
         btnDropBuku.setEnabled(false);
     }
 
+    //penulis
     public void resetPenulis() {
         txtIdPenulisInsert.setEnabled(false);
         txtPenulisInsert.setEnabled(false);
